@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@shared/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página no encontrada" noindex>
+  <main class="grid min-h-dvh place-items-center px-6 text-center">
+    <div class="flex max-w-md flex-col items-center gap-5">
+      <p class="eyebrow text-crimson">Error 404</p>
+      <h1 class="text-4xl sm:text-5xl">Esta fragancia se evaporó</h1>
+      <p class="text-ink-soft">La página que buscas no existe o cambió de lugar.</p>
+      <a
+        href="/"
+        class="eyebrow mt-2 bg-ink px-8 py-4 text-white transition-colors duration-300 ease-(--ease-luxe) hover:bg-crimson"
+      >
+        Volver al inicio
+      </a>
+    </div>
+  </main>
+</BaseLayout>

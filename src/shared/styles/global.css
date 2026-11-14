@@ -1,0 +1,79 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens de marca Excentrix — estilo Editorial (ver PLAN-EXCENTRIX.md §7)
+ * Regla 60/30/10: papel (fondo) · tinta (texto y secciones oscuras) · carmesí (acentos y CTAs)
+ */
+@theme {
+  /* Color */
+  --color-paper: #f7f5f2;
+  --color-white: #ffffff;
+  --color-ink: #0e0e0e;
+  --color-ink-soft: #5e5a57;
+  --color-line: #e4e0db;
+  --color-crimson: #8e1b24;
+  --color-crimson-hover: #a8222d;
+  /* Carmesí para texto sobre fondo tinta (el base no alcanza contraste AA allí) */
+  --color-crimson-light: #c8323e;
+  --color-whatsapp: #25d366;
+
+  /* Tipografía: las mismas fuentes del logotipo */
+  --font-display: 'Lora Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Montserrat Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Mayúsculas espaciadas tipo "PERFUMERÍA" */
+  --tracking-brand: 0.28em;
+
+  /* Movimiento */
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-medium tracking-tight text-balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-crimson);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--color-crimson);
+    color: var(--color-white);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Etiqueta en mayúsculas espaciadas (marca, secciones, botones) */
+  .eyebrow {
+    @apply text-xs font-medium tracking-(--tracking-brand) uppercase;
+  }
+
+  .price {
+    font-variant-numeric: tabular-nums;
+  }
+}

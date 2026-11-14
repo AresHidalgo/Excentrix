@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@shared/layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <main class="grid min-h-dvh place-items-center px-6 py-16 text-center">
+    <div class="flex flex-col items-center gap-8">
+      <img
+        src="/brand/logo-completo.svg"
+        alt="Excentrix Perfumería"
+        width="320"
+        height="332"
+        class="h-auto w-56 sm:w-72"
+        fetchpriority="high"
+      />
+      <span class="h-px w-12 bg-crimson" aria-hidden="true"></span>
+      <p class="eyebrow text-ink-soft">Muy pronto</p>
+    </div>
+  </main>
+</BaseLayout>
