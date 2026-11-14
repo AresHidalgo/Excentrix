@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="190" viewBox="0 0 880 190" font-family="Montserrat, Helvetica, Arial, sans-serif">
+<rect width="880" height="190" rx="14" fill="#FFFFFF" stroke="#E4E0DB"/>
+<rect x="12.0" y="12" width="122.7" height="110" rx="8" fill="#F7F5F2" stroke="#E4E0DB"/>
+<text x="24.0" y="106" font-size="13" font-weight="600" fill="#0E0E0E" letter-spacing="0.5">#F7F5F2</text>
+<text x="12.0" y="146" font-size="14" font-weight="600" fill="#0E0E0E">Papel</text>
+<text x="12.0" y="166" font-size="11" fill="#5E5A57">60 % · fondo</text>
+<rect x="158.7" y="12" width="122.7" height="110" rx="8" fill="#0E0E0E" stroke="#E4E0DB"/>
+<text x="170.7" y="106" font-size="13" font-weight="600" fill="#F7F5F2" letter-spacing="0.5">#0E0E0E</text>
+<text x="158.7" y="146" font-size="14" font-weight="600" fill="#0E0E0E">Tinta</text>
+<text x="158.7" y="166" font-size="11" fill="#5E5A57">30 % · texto y secciones</text>
+<rect x="305.3" y="12" width="122.7" height="110" rx="8" fill="#8E1B24" stroke="#E4E0DB"/>
+<text x="317.3" y="106" font-size="13" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">#8E1B24</text>
+<text x="305.3" y="146" font-size="14" font-weight="600" fill="#0E0E0E">Carmesí</text>
+<text x="305.3" y="166" font-size="11" fill="#5E5A57">10 % · acentos y CTAs</text>
+<rect x="452.0" y="12" width="122.7" height="110" rx="8" fill="#C8323E" stroke="#E4E0DB"/>
+<text x="464.0" y="106" font-size="13" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">#C8323E</text>
+<text x="452.0" y="146" font-size="14" font-weight="600" fill="#0E0E0E">Carmesí claro</text>
+<text x="452.0" y="166" font-size="11" fill="#5E5A57">acento sobre tinta</text>
+<rect x="598.7" y="12" width="122.7" height="110" rx="8" fill="#5E5A57" stroke="#E4E0DB"/>
+<text x="610.7" y="106" font-size="13" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">#5E5A57</text>
+<text x="598.7" y="146" font-size="14" font-weight="600" fill="#0E0E0E">Tinta suave</text>
+<text x="598.7" y="166" font-size="11" fill="#5E5A57">texto secundario</text>
+<rect x="745.3" y="12" width="122.7" height="110" rx="8" fill="#E4E0DB" stroke="#E4E0DB"/>
+<text x="757.3" y="106" font-size="13" font-weight="600" fill="#0E0E0E" letter-spacing="0.5">#E4E0DB</text>
+<text x="745.3" y="146" font-size="14" font-weight="600" fill="#0E0E0E">Línea</text>
+<text x="745.3" y="166" font-size="11" fill="#5E5A57">bordes y divisores</text>
+</svg>
