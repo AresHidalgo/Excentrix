@@ -1,7 +1,6 @@
 {
   "projects": {
-    "default": "excentrix-dev",
-    "dev": "excentrix-dev",
-    "prod": "excentrix"
+    "default": "excentrix-e7794",
+    "prod": "excentrix-e7794"
   }
 }

@@ -37,3 +37,9 @@ brand/.venv/
 # Node 24 local (enlace a /usr/bin/node-24)
 .tools/
 .claude/launch.json
+
+# Credenciales de Firebase (cuentas de servicio). NUNCA subir.
+*-firebase-adminsdk-*.json
+serviceAccount*.json
+.env.*
+!.env.example
