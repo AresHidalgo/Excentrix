@@ -1,0 +1,62 @@
+---
+/** Estructura del dashboard (maqueta estática). En la fase 2 se vuelve una app React protegida. */
+interface Props {
+  active: string;
+  title: string;
+}
+
+const { active, title } = Astro.props;
+const nav = ['Resumen', 'Perfumes', 'Categorías', 'Marcas', 'Banners', 'Ajustes'];
+---
+
+<div class="min-h-dvh bg-paper lg:grid lg:grid-cols-[15rem_1fr]">
+  <aside class="flex flex-col bg-ink text-white lg:sticky lg:top-0 lg:h-dvh">
+    <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+      <img
+        src="/brand/logo-horizontal-negativo.svg"
+        alt="Excentrix Perfumería"
+        width="1462"
+        height="425"
+        class="h-8 w-auto"
+      />
+      <span class="eyebrow text-[9px] text-white/60">Admin</span>
+    </div>
+    <nav aria-label="Administración" class="flex-1 overflow-x-auto px-3 py-3 lg:py-6">
+      <ul class="flex gap-1 lg:flex-col">
+        {nav.map((item) => (
+          <li>
+            <a
+              href="#"
+              aria-current={item === active ? 'page' : undefined}
+              class="block px-3 py-2.5 text-sm whitespace-nowrap text-white/70 transition-colors hover:bg-white/5 hover:text-white aria-[current=page]:bg-white/10 aria-[current=page]:text-white"
+            >
+              {item}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="hidden border-t border-white/10 p-4 lg:block">
+      <button
+        type="button"
+        class="flex h-11 w-full items-center justify-center rounded-[2px] bg-crimson text-xs font-medium tracking-[0.2em] text-white uppercase hover:bg-crimson-hover"
+      >
+        Publicar cambios
+      </button>
+      <p class="mt-3 flex items-center gap-2 text-xs text-white/60">
+        <span class="size-1.5 rounded-full bg-white/60" aria-hidden="true"></span>
+        Último build: hoy, 10:42 · listo
+      </p>
+    </div>
+  </aside>
+
+  <div class="flex min-w-0 flex-col">
+    <header class="flex items-center justify-between gap-4 border-b border-line bg-white px-5 py-4 sm:px-8">
+      <h1 class="font-sans! text-lg font-semibold tracking-normal">{title}</h1>
+      <span class="text-xs text-ink-soft">admin@excentrix.co</span>
+    </header>
+    <div class="flex flex-col gap-8 p-5 sm:p-8">
+      <slot />
+    </div>
+  </div>
+</div>

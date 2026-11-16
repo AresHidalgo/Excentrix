@@ -1,0 +1,156 @@
+---
+import { ProductImage, type Perfume } from '@modules/product';
+
+interface Props {
+  perfume: Perfume;
+}
+
+const { perfume } = Astro.props;
+const field =
+  'h-10 w-full border border-line bg-white px-3 text-sm focus:border-ink focus:outline-none';
+const label = 'flex flex-col gap-1.5 text-xs font-medium text-ink-soft';
+---
+
+<section id="editar" class="border border-line bg-white" aria-labelledby="editar-titulo">
+  <div class="flex items-center justify-between border-b border-line p-4">
+    <h2 id="editar-titulo" class="font-sans! text-base font-semibold tracking-normal">
+      Editar perfume · {perfume.name}
+    </h2>
+    <span class="text-xs text-ink-soft">Autoguardado hace 5 s</span>
+  </div>
+
+  <form class="grid gap-8 p-4 sm:p-6 xl:grid-cols-[1fr_20rem]" onsubmit="return false">
+    <div class="flex flex-col gap-8">
+      <fieldset class="grid gap-4 sm:grid-cols-2">
+        <legend class="mb-4 text-sm font-semibold">Datos básicos</legend>
+        <label class={label}>
+          Nombre
+          <input class={field} value={perfume.name} />
+        </label>
+        <label class={label}>
+          Marca
+          <input class={field} value={perfume.brand} />
+        </label>
+        <label class={label}>
+          Slug
+          <input class={`${field} text-ink-soft`} value={perfume.slug} readonly />
+        </label>
+        <label class={label}>
+          Casa
+          <select class={field}>
+            <option selected={perfume.house === 'nicho'}>Nicho</option>
+            <option selected={perfume.house === 'disenador'}>Diseñador</option>
+            <option selected={perfume.house === 'arabe'}>Árabe</option>
+          </select>
+        </label>
+        <label class:list={[label, 'sm:col-span-2']}>
+          Descripción
+          <textarea class={`${field} h-24 py-2`}>{perfume.description}</textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend class="mb-4 flex w-full items-center justify-between text-sm font-semibold">
+          Presentaciones
+        </legend>
+        <div class="mb-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            class="h-9 rounded-[2px] border border-ink px-3 text-xs font-medium hover:bg-ink hover:text-white"
+          >
+            + Agregar decants estándar (3 · 5 · 10 ml)
+          </button>
+          <button
+            type="button"
+            class="h-9 rounded-[2px] border border-line px-3 text-xs font-medium hover:border-ink"
+          >
+            + Agregar frasco
+          </button>
+        </div>
+        <div class="overflow-x-auto border border-line">
+          <table class="w-full min-w-[36rem] text-sm">
+            <thead class="bg-paper text-left text-xs text-ink-soft">
+              <tr>
+                <th scope="col" class="px-3 py-2 font-medium">
+                  Tipo
+                </th>
+                <th scope="col" class="px-3 py-2 font-medium">
+                  ml
+                </th>
+                <th scope="col" class="px-3 py-2 font-medium">
+                  Precio
+                </th>
+                <th scope="col" class="px-3 py-2 font-medium">
+                  Precio anterior
+                </th>
+                <th scope="col" class="px-3 py-2 font-medium">
+                  Disponible
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {perfume.variants.map((v) => (
+                <tr class="border-t border-line">
+                  <td class="px-3 py-2">
+                    {v.type === 'decant' ? 'Decant' : `Frasco (${v.condition ?? 'nuevo'})`}
+                  </td>
+                  <td class="px-3 py-2">{v.ml}</td>
+                  <td class="px-3 py-2">
+                    <input class={`${field} h-8`} value={v.price} aria-label="Precio" />
+                  </td>
+                  <td class="px-3 py-2">
+                    <input
+                      class={`${field} h-8`}
+                      value={v.compareAtPrice ?? ''}
+                      aria-label="Precio anterior"
+                    />
+                  </td>
+                  <td class="px-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={v.available}
+                      aria-label="Disponible"
+                      class="size-4 accent-ink"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+
+    <aside class="flex flex-col gap-4">
+      <p class="text-sm font-semibold">Imágenes</p>
+      <div class="flex flex-col items-center gap-2 border border-dashed border-ink-soft/50 bg-paper px-4 py-8 text-center">
+        <span class="text-sm">Arrastra fotos aquí o</span>
+        <button type="button" class="text-sm font-medium underline underline-offset-4">
+          elige archivos
+        </button>
+        <span class="text-xs text-ink-soft">
+          JPG, PNG, WEBP o AVIF · mínimo 1000 px · máx. 5 MB
+        </span>
+      </div>
+      <div class="flex flex-col gap-2">
+        <span class="text-xs text-ink-soft">Vista previa en tarjeta (4:5, fondo blanco)</span>
+        <div class="w-40 border border-line">
+          <ProductImage alt={`Vista previa de ${perfume.name}`} shape={perfume.shape} />
+        </div>
+      </div>
+      <label class={label}>
+        Estado
+        <select class={field}>
+          <option selected>Publicado</option>
+          <option>Borrador</option>
+        </select>
+      </label>
+      <button
+        type="button"
+        class="h-11 rounded-[2px] bg-ink text-xs font-medium tracking-[0.2em] text-white uppercase"
+      >
+        Guardar
+      </button>
+    </aside>
+  </form>
+</section>

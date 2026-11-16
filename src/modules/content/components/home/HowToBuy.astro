@@ -1,0 +1,46 @@
+---
+import Container from '@shared/ui/Container.astro';
+import SectionHeading from '@shared/ui/SectionHeading.astro';
+import { WhatsAppButton } from '@modules/whatsapp';
+
+const steps = [
+  {
+    title: 'Elige tu perfume',
+    text: 'Explora por colección, género o marca y entra a la ficha del perfume que te guste.',
+  },
+  {
+    title: 'Escoge la presentación',
+    text: 'Decant de 3, 5 o 10 ml, o el frasco completo. El precio cambia al instante.',
+  },
+  {
+    title: 'Escríbenos por WhatsApp',
+    text: 'Se abre la conversación con tu pedido ya escrito. Allí acordamos pago y envío.',
+  },
+];
+---
+
+<section
+  id="como-comprar"
+  class="bg-ink py-20 text-white sm:py-28"
+  aria-labelledby="comprar-titulo"
+>
+  <Container class="flex flex-col gap-14">
+    <SectionHeading
+      id="comprar-titulo"
+      tone="dark"
+      eyebrow="Compra fácil"
+      title="Cómo comprar"
+      description="Sin registros ni carritos: un perfume a la vez, o varios en la misma conversación."
+    />
+    <ol class="grid gap-10 md:grid-cols-3 md:gap-8">
+      {steps.map((step, i) => (
+        <li class="flex flex-col gap-4 border-t border-white/15 pt-6">
+          <span class="font-display text-5xl leading-none text-crimson-light">0{i + 1}</span>
+          <h3 class="text-2xl text-white">{step.title}</h3>
+          <p class="max-w-xs text-sm leading-relaxed text-white/70">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+    <WhatsAppButton label="Escríbenos por WhatsApp" class="self-start" />
+  </Container>
+</section>

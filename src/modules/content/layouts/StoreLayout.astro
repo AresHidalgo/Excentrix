@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@shared/layouts/BaseLayout.astro';
+import { buildMenu, getMockCategories } from '@modules/catalog';
+import { WhatsAppFloat } from '@modules/whatsapp';
+import AnnouncementBar from '../components/chrome/AnnouncementBar.astro';
+import Footer from '../components/chrome/Footer.astro';
+import Header from '../components/chrome/Header.astro';
+import { getMockSettings } from '../data/settings';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Mensaje del botón flotante (por ejemplo, con el perfume de la ficha). */
+  whatsappMessage?: string;
+  /**
+   * Oculta el botón flotante en móvil. Se usa en la ficha del perfume, que ya tiene su propio
+   * botón "Comprar por WhatsApp" y el flotante lo taparía.
+   */
+  hideWhatsAppFloatOnMobile?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  noindex = false,
+  whatsappMessage,
+  hideWhatsAppFloatOnMobile = false,
+} = Astro.props;
+const settings = getMockSettings();
+const menu = buildMenu(getMockCategories());
+// Con build.format 'file' la ruta llega como /x.html: se normaliza para marcar el enlace activo.
+const currentPath = Astro.url.pathname.replace(/\.html$/, '');
+---
+
+<BaseLayout title={title} description={description} image={image} noindex={noindex}>
+  <a
+    href="#contenido"
+    class="eyebrow sr-only z-50 bg-ink px-4 py-3 text-white focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+  >
+    Saltar al contenido
+  </a>
+  {settings.announcementBar.active && <AnnouncementBar text={settings.announcementBar.text} />}
+  <Header menu={menu} currentPath={currentPath} />
+  <main id="contenido">
+    <slot />
+  </main>
+  <Footer menu={menu} social={settings.social} />
+  <div class={hideWhatsAppFloatOnMobile ? 'hidden lg:block' : undefined}>
+    <WhatsAppFloat message={whatsappMessage} />
+  </div>
+</BaseLayout>

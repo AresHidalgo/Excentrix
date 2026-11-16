@@ -20,14 +20,16 @@ export default defineConfig({
   },
   integrations: [
     // Islas públicas livianas: todos los módulos menos el admin
+    // Los patrones se comparan con rutas absolutas: deben empezar con **/
     preact({
-      include: ['src/modules/**/*.tsx', 'src/shared/**/*.tsx'],
-      exclude: ['src/modules/admin/**'],
+      include: ['**/src/modules/**/*.tsx', '**/src/shared/**/*.tsx'],
+      exclude: ['**/src/modules/admin/**'],
     }),
     // Dashboard de administrador
-    react({ include: ['src/modules/admin/**'] }),
+    react({ include: ['**/src/modules/admin/**'] }),
     sitemap({
-      filter: (page) => !page.includes('/admin'),
+      // Admin y maquetas de diseño (fase 1) fuera del sitemap
+      filter: (page) => !page.includes('/admin') && !page.includes('/maquetas'),
     }),
   ],
   vite: {

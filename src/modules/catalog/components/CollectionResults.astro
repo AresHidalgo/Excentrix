@@ -1,0 +1,19 @@
+---
+import type { FacetItem } from '../schemas';
+import CollectionBrowser from './CollectionBrowser.tsx';
+
+/**
+ * Envoltura de la isla de filtros. La isla se importa con ruta relativa para que Astro la asocie
+ * a la integración de Preact por su ruta de archivo (opción include de astro.config.mjs).
+ */
+interface Props {
+  items: FacetItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<CollectionBrowser client:idle items={items}>
+  <slot />
+  <slot name="empty" slot="empty" />
+</CollectionBrowser>

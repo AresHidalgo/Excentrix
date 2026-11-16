@@ -1,0 +1,72 @@
+---
+import { routes } from '@shared/config/routes';
+import Button from '@shared/ui/Button.astro';
+import Container from '@shared/ui/Container.astro';
+
+const facts = [
+  { n: '3 ml', text: 'Decants desde 3 ml para probar en tu piel' },
+  { n: '100 %', text: 'Perfumes originales, sellados o tester' },
+  { n: '1 clic', text: 'Compra directa por WhatsApp, sin registros' },
+];
+---
+
+<section class="relative overflow-hidden bg-ink text-white" aria-labelledby="hero-titulo">
+  <Container class="grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-12 lg:gap-8 lg:py-28">
+    <div class="flex animate-fade-in flex-col gap-8 lg:col-span-7">
+      <p class="eyebrow flex items-center gap-3 text-white/70">
+        <span aria-hidden="true" class="h-px w-8 bg-crimson-light"></span>
+        Nicho · Diseñador · Árabe
+      </p>
+      <h1
+        id="hero-titulo"
+        class="text-[2.75rem] leading-[1.02] text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
+      >
+        Tu perfume,
+        <br />
+        <span class="text-crimson-light">tu firma.</span>
+      </h1>
+      <p class="max-w-md text-base leading-relaxed text-white/70">
+        Frascos originales y decants para probar antes de decidir. Eliges tu perfume, nos escribes
+        por WhatsApp y te lo enviamos a cualquier lugar de Colombia.
+      </p>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <Button href={routes.collection('nuevos-lanzamientos')} variant="accent" size="lg">
+          Explorar colección
+        </Button>
+        <Button href={routes.page('que-es-un-decant')} variant="outline-light" size="lg">
+          ¿Qué es un decant?
+        </Button>
+      </div>
+    </div>
+
+    <div class="relative flex justify-center lg:col-span-5 lg:justify-end">
+      <div class="relative w-60 sm:w-72 lg:w-full lg:max-w-[22rem]">
+        <span
+          aria-hidden="true"
+          class="absolute -inset-4 border border-white/10 sm:-inset-6 lg:-inset-8"
+        ></span>
+        <img
+          src="/brand/isotipo-negativo.svg"
+          alt=""
+          width="322"
+          height="425"
+          fetchpriority="high"
+          class="relative h-auto w-full"
+        />
+      </div>
+    </div>
+  </Container>
+
+  <div class="border-t border-white/10">
+    <Container>
+      <ul class="grid divide-white/10 sm:grid-cols-3 sm:divide-x">
+        {facts.map((f) => (
+          <li class="flex items-baseline gap-4 border-b border-white/10 py-5 last:border-0 sm:border-0 sm:px-6 sm:first:pl-0">
+            <span class="font-display text-2xl text-crimson-light">{f.n}</span>
+            <span class="text-xs leading-relaxed text-white/70">{f.text}</span>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </div>
+</section>

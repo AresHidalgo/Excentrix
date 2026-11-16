@@ -1,0 +1,69 @@
+---
+import { routes } from '@shared/config/routes';
+import Button from '@shared/ui/Button.astro';
+import Container from '@shared/ui/Container.astro';
+import SectionHeading from '@shared/ui/SectionHeading.astro';
+
+// ~14 atomizaciones por ml (PLAN: página educativa "¿Qué es un decant?")
+const vials = [
+  { ml: 3, sprays: 40, height: 96 },
+  { ml: 5, sprays: 70, height: 128 },
+  { ml: 10, sprays: 140, height: 176 },
+];
+---
+
+<section
+  id="que-es-un-decant"
+  class="border-y border-line bg-white py-20 sm:py-28"
+  aria-labelledby="decant-titulo"
+>
+  <Container class="grid items-center gap-14 lg:grid-cols-2 lg:gap-24">
+    <div class="flex flex-col gap-8">
+      <SectionHeading
+        id="decant-titulo"
+        eyebrow="Guía"
+        title="¿Qué es un decant?"
+        description="Es el mismo perfume original, trasvasado del frasco de la marca a un atomizador de vidrio. La forma más sencilla de conocer un perfume en tu piel antes de comprar el frasco completo."
+      />
+      <Button href={routes.page('que-es-un-decant')} variant="outline" class="self-start">
+        Leer la guía completa
+      </Button>
+    </div>
+
+    <ul class="grid grid-cols-3 items-end gap-4 border-b border-line sm:gap-8">
+      {vials.map((v) => (
+        <li class="flex flex-col items-center gap-5 pb-6">
+          <svg
+            viewBox={`0 0 48 ${v.height + 28}`}
+            width="48"
+            height={v.height + 28}
+            aria-hidden="true"
+            class="text-ink"
+          >
+            <rect x="16" y="0" width="16" height="18" fill="#8e1b24" />
+            <rect x="20" y="18" width="8" height="10" fill="currentColor" />
+            <rect
+              x="6.5"
+              y="28.5"
+              width="35"
+              height={v.height - 1}
+              fill="none"
+              stroke="currentColor"
+            />
+            <rect
+              x="10"
+              y={28 + v.height * 0.25}
+              width="28"
+              height={v.height * 0.72}
+              fill="currentColor"
+            />
+          </svg>
+          <div class="flex flex-col items-center gap-1 text-center">
+            <span class="font-display text-3xl leading-none">{v.ml} ml</span>
+            <span class="text-xs text-ink-soft">≈ {v.sprays} atomizaciones</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>

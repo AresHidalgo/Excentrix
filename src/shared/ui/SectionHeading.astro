@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  link?: { href: string; label?: string };
+  tone?: 'light' | 'dark';
+  as?: 'h1' | 'h2' | 'h3';
+  id?: string;
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  link,
+  tone = 'light',
+  as: Heading = 'h2',
+  id,
+  class: className,
+} = Astro.props;
+const dark = tone === 'dark';
+---
+
+<div
+  class:list={[
+    'flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-10',
+    className,
+  ]}
+>
+  <div class="flex max-w-2xl flex-col gap-4">
+    {eyebrow && (
+      <p class:list={['eyebrow flex items-center gap-3', dark ? 'text-white/70' : 'text-ink-soft']}>
+        <span
+          aria-hidden="true"
+          class:list={['h-px w-8', dark ? 'bg-crimson-light' : 'bg-crimson']}
+        />
+        {eyebrow}
+      </p>
+    )}
+    <Heading
+      id={id}
+      class:list={[
+        'text-3xl leading-[1.1] sm:text-4xl lg:text-5xl',
+        dark ? 'text-white' : 'text-ink',
+      ]}
+    >
+      {title}
+    </Heading>
+    {description && (
+      <p
+        class:list={['max-w-xl text-sm leading-relaxed', dark ? 'text-white/70' : 'text-ink-soft']}
+      >
+        {description}
+      </p>
+    )}
+  </div>
+  {link && (
+    <a
+      href={link.href}
+      class:list={[
+        'eyebrow group inline-flex shrink-0 items-center gap-2 pb-1',
+        dark ? 'text-white' : 'text-ink',
+      ]}
+    >
+      <span class="border-b border-current pb-1 transition-colors duration-300 group-hover:border-crimson">
+        {link.label ?? 'Ver todo'}
+      </span>
+      <Icon
+        name="arrow-right"
+        size={16}
+        class="transition-transform duration-300 ease-(--ease-luxe) group-hover:translate-x-1"
+      />
+    </a>
+  )}
+</div>

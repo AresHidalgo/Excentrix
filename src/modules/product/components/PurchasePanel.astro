@@ -1,0 +1,51 @@
+---
+import { routes } from '@shared/config/routes';
+import {
+  buildAvailabilityMessage,
+  buildWhatsAppMessage,
+  buildWhatsAppUrl,
+  WHATSAPP_PHONE,
+} from '@modules/whatsapp';
+import { cheapestVariant, variantDiscount } from '../lib/pricing';
+import type { Perfume } from '../schemas';
+import PresentationSelector, { type PresentationOption } from './PresentationSelector.tsx';
+
+interface Props {
+  perfume: Perfume;
+}
+
+const { perfume } = Astro.props;
+const url = new URL(routes.perfume(perfume.slug), Astro.site).href;
+
+// Los enlaces de WhatsApp se arman aquí (servidor) para que la isla no importe otros módulos.
+const ordered = [...perfume.variants].sort((a, b) =>
+  a.type === b.type ? a.ml - b.ml : a.type === 'decant' ? -1 : 1,
+);
+const options: PresentationOption[] = ordered.map((v) => ({
+  id: v.id,
+  type: v.type,
+  ml: v.ml,
+  tester: v.condition === 'tester',
+  price: v.price,
+  compareAtPrice: v.compareAtPrice,
+  discount: variantDiscount(v),
+  available: v.available,
+  whatsappUrl: buildWhatsAppUrl(WHATSAPP_PHONE, buildWhatsAppMessage({ perfume, variant: v, url })),
+}));
+
+const leadTimeLabel = perfume.badges.includes('preventa')
+  ? 'Preventa'
+  : perfume.badges.includes('bajo-encargo')
+    ? 'Bajo encargo'
+    : null;
+---
+
+<PresentationSelector
+  client:idle
+  options={options}
+  defaultId={cheapestVariant(perfume)?.id ?? null}
+  availabilityUrl={buildWhatsAppUrl(WHATSAPP_PHONE, buildAvailabilityMessage(perfume, url))}
+  leadTime={perfume.leadTime}
+  leadTimeLabel={leadTimeLabel}
+  decantInfoHref={routes.page('que-es-un-decant')}
+/>

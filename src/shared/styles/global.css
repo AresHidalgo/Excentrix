@@ -77,3 +77,37 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Animaciones sutiles (opacidad / desplazamiento). prefers-reduced-motion las anula arriba. */
+@theme {
+  --animate-fade-in: fade-in 400ms var(--ease-luxe) both;
+  --animate-drawer-in: drawer-in 450ms var(--ease-luxe) both;
+  --animate-sheet-up: sheet-up 450ms var(--ease-luxe) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes drawer-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}

@@ -1,0 +1,28 @@
+---
+import type { Perfume } from '@modules/product';
+import ProductCard from './ProductCard.astro';
+
+interface Props {
+  perfumes: Perfume[];
+  /** Con barra lateral de filtros hay menos ancho: 4 columnas solo desde xl. */
+  withSidebar?: boolean;
+  label?: string;
+  class?: string;
+}
+
+const { perfumes, withSidebar = false, label, class: className } = Astro.props;
+---
+
+<ul
+  class:list={[
+    'grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-5 sm:gap-y-10 md:grid-cols-3',
+    withSidebar ? 'xl:grid-cols-4' : 'lg:grid-cols-4',
+    className,
+  ]}
+  aria-label={label}
+  data-product-grid
+>
+  {perfumes.map((p, i) => (
+    <ProductCard perfume={p} loading={i < 4 ? 'eager' : 'lazy'} />
+  ))}
+</ul>

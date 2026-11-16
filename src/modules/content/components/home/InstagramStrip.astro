@@ -1,0 +1,49 @@
+---
+import Container from '@shared/ui/Container.astro';
+import Icon from '@shared/ui/Icon.astro';
+import { ProductImage, type BottleShape } from '@modules/product';
+
+interface Props {
+  href: string;
+  handle: string;
+}
+
+const { href, handle } = Astro.props;
+const tiles: { shape: BottleShape; variant: 'ambiente' | 'detalle' }[] = [
+  { shape: 'oud', variant: 'ambiente' },
+  { shape: 'round', variant: 'detalle' },
+  { shape: 'faceted', variant: 'ambiente' },
+  { shape: 'tall', variant: 'detalle' },
+  { shape: 'round', variant: 'ambiente' },
+  { shape: 'oud', variant: 'detalle' },
+];
+---
+
+<section class="py-20 sm:py-24" aria-labelledby="instagram-titulo">
+  <Container class="flex flex-col gap-10">
+    <div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+      <div class="flex flex-col gap-3">
+        <p class="eyebrow text-ink-soft">Instagram</p>
+        <h2 id="instagram-titulo" class="text-3xl sm:text-4xl">
+          {handle}
+        </h2>
+      </div>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="eyebrow inline-flex items-center gap-2 border-b border-ink pb-1 hover:border-crimson"
+      >
+        <Icon name="instagram" size={16} />
+        Síguenos
+      </a>
+    </div>
+    <ul class="grid grid-cols-3 gap-2 md:grid-cols-6" aria-hidden="true">
+      {tiles.map((t) => (
+        <li>
+          <ProductImage alt="" shape={t.shape} variant={t.variant} class="aspect-square!" />
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>

@@ -1,0 +1,20 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { ContentArticle, getMockPages, StoreLayout, type ContentPage } from '@modules/content';
+
+export const getStaticPaths = (() =>
+  getMockPages().map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  page: ContentPage;
+}
+
+const { page } = Astro.props;
+---
+
+<StoreLayout title={`${page.title} (maqueta)`} description={page.intro} noindex>
+  <ContentArticle page={page} />
+</StoreLayout>

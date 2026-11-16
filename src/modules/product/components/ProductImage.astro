@@ -1,0 +1,140 @@
+---
+import type { BottleShape } from '../schemas';
+
+/**
+ * Imagen de producto 4:5 sobre blanco. Con `src` muestra la foto real (Cloudinary, fase 3);
+ * sin `src` dibuja una silueta de frasco minimalista para que las maquetas se vean intencionales.
+ */
+interface Props {
+  src?: string;
+  alt: string;
+  shape?: BottleShape;
+  /** principal: fondo blanco · detalle: acercamiento sobre papel · ambiente: fondo tinta. */
+  variant?: 'principal' | 'detalle' | 'ambiente';
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  shape = 'tall',
+  variant = 'principal',
+  width = 800,
+  height = 1000,
+  loading = 'lazy',
+  sizes = '(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw',
+  class: className,
+} = Astro.props;
+
+const dark = variant === 'ambiente';
+const c = {
+  bg: dark ? '#0e0e0e' : variant === 'detalle' ? '#f7f5f2' : '#ffffff',
+  glass: dark ? '#262322' : '#0e0e0e',
+  cap: dark ? '#f7f5f2' : '#0e0e0e',
+  accent: dark ? '#c8323e' : '#8e1b24',
+  line: dark ? 'rgb(255 255 255 / 0.28)' : 'rgb(255 255 255 / 0.4)',
+  shine: dark ? 'rgb(255 255 255 / 0.18)' : 'rgb(255 255 255 / 0.22)',
+};
+const zoom =
+  variant === 'detalle' ? 'translate(200 230) scale(1.7) translate(-200 -230)' : undefined;
+---
+
+{src ? (
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+    sizes={sizes}
+    class:list={['aspect-[4/5] w-full bg-white object-contain', className]}
+  />
+) : (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 400 500"
+    role="img"
+    aria-label={alt}
+    preserveAspectRatio="xMidYMid slice"
+    class:list={['block aspect-[4/5] w-full', className]}
+  >
+    <rect width="400" height="500" fill={c.bg} />
+    {dark && <line x1="70" y1="414" x2="330" y2="414" stroke={c.accent} stroke-width="1" />}
+    <g transform={zoom}>
+      {!dark && <ellipse cx="200" cy="414" rx="96" ry="6" fill="#0e0e0e" opacity="0.06" />}
+
+      {shape === 'tall' && (
+        <g>
+          <rect x="184" y="160" width="32" height="22" fill={c.glass} />
+          <rect x="150" y="180" width="100" height="230" rx="3" fill={c.glass} />
+          <rect x="162" y="196" width="3" height="196" fill={c.shine} />
+          <rect x="170" y="300" width="60" height="44" fill="none" stroke={c.line} />
+          <line x1="182" y1="322" x2="218" y2="322" stroke={c.line} />
+          <rect x="170" y="96" width="60" height="64" rx="2" fill={c.cap} />
+          <rect x="170" y="150" width="60" height="6" fill={c.accent} />
+        </g>
+      )}
+
+      {shape === 'round' && (
+        <g>
+          <rect x="187" y="206" width="26" height="24" fill={c.glass} />
+          <circle cx="200" cy="318" r="92" fill={c.glass} />
+          <path
+            d="M138 300 A66 66 0 0 1 168 254"
+            fill="none"
+            stroke={c.shine}
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <circle cx="200" cy="318" r="34" fill="none" stroke={c.line} />
+          <rect x="174" y="150" width="52" height="58" rx="2" fill={c.cap} />
+          <rect x="183" y="220" width="34" height="6" fill={c.accent} />
+        </g>
+      )}
+
+      {shape === 'faceted' && (
+        <g>
+          <rect x="186" y="168" width="28" height="24" fill={c.glass} />
+          <polygon
+            points="152,190 248,190 276,226 276,382 248,410 152,410 124,382 124,226"
+            fill={c.glass}
+          />
+          <polygon
+            points="168,214 232,214 252,240 252,370 232,392 168,392 148,370 148,240"
+            fill="none"
+            stroke={c.line}
+          />
+          <polygon points="200,284 213,300 200,316 187,300" fill={c.accent} />
+          <polygon points="200,82 238,112 228,168 172,168 162,112" fill={c.cap} />
+          <polyline points="162,112 238,112" fill="none" stroke={c.shine} />
+        </g>
+      )}
+
+      {shape === 'oud' && (
+        <g>
+          <path
+            d="M160 410 L240 410 Q258 410 258 390 L258 300 Q258 250 216 228 L216 214 L184 214 L184 228 Q142 250 142 300 L142 390 Q142 410 160 410 Z"
+            fill={c.glass}
+          />
+          <path
+            d="M155 304 Q155 268 178 252"
+            fill="none"
+            stroke={c.shine}
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <line x1="142" y1="332" x2="258" y2="332" stroke={c.line} />
+          <line x1="142" y1="338" x2="258" y2="338" stroke={c.line} />
+          <path d="M184 214 L216 214 L216 178 Q216 152 200 114 Q184 152 184 178 Z" fill={c.cap} />
+          <circle cx="200" cy="106" r="6" fill={c.cap} />
+          <rect x="181" y="196" width="38" height="7" fill={c.accent} />
+        </g>
+      )}
+    </g>
+  </svg>
+)}

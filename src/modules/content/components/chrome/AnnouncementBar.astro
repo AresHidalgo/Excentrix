@@ -1,0 +1,13 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<div class="bg-ink text-white">
+  <p class="eyebrow mx-auto max-w-[1320px] px-4 py-2.5 text-center text-[10px] tracking-[0.14em] sm:text-[11px] sm:tracking-(--tracking-brand)">
+    {text}
+  </p>
+</div>

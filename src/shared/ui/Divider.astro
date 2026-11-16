@@ -1,0 +1,19 @@
+---
+interface Props {
+  /** 'line': divisor de 1 px a lo ancho · 'accent': regla corta carmesí. */
+  variant?: 'line' | 'accent';
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { variant = 'line', tone = 'light', class: className } = Astro.props;
+---
+
+{variant === 'accent' ? (
+  <span
+    aria-hidden="true"
+    class:list={['block h-px w-12', tone === 'dark' ? 'bg-crimson-light' : 'bg-crimson', className]}
+  />
+) : (
+  <hr class:list={['h-px border-0', tone === 'dark' ? 'bg-white/15' : 'bg-line', className]} />
+)}

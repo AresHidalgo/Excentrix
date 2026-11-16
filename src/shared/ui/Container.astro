@@ -1,0 +1,24 @@
+---
+import type { HTMLTag } from 'astro/types';
+
+interface Props {
+  as?: HTMLTag;
+  /** 'narrow' para textos largos (páginas de contenido). */
+  width?: 'default' | 'narrow';
+  class?: string;
+  id?: string;
+}
+
+const { as: Tag = 'div', width = 'default', class: className, id } = Astro.props;
+---
+
+<Tag
+  id={id}
+  class:list={[
+    'mx-auto w-full px-4 sm:px-6 lg:px-10',
+    width === 'narrow' ? 'max-w-3xl' : 'max-w-[1320px]',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

@@ -1,0 +1,62 @@
+---
+import type { OlfactoryNotes } from '../schemas';
+
+interface Props {
+  notes: OlfactoryNotes;
+  class?: string;
+}
+
+const { notes, class: className } = Astro.props;
+const tiers = [
+  { key: 'top', name: 'Salida', when: 'Los primeros minutos', items: notes.top },
+  { key: 'heart', name: 'Corazón', when: 'De la primera hora en adelante', items: notes.heart },
+  { key: 'base', name: 'Fondo', when: 'Lo que permanece en la piel', items: notes.base },
+] as const;
+---
+
+<section
+  aria-labelledby="piramide-titulo"
+  class:list={['grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20', className]}
+>
+  <div class="flex flex-col gap-6">
+    <p class="eyebrow flex items-center gap-3 text-ink-soft">
+      <span aria-hidden="true" class="h-px w-8 bg-crimson"></span>
+      Notas
+    </p>
+    <h2 id="piramide-titulo" class="text-3xl leading-tight sm:text-4xl">
+      Pirámide olfativa
+    </h2>
+    <p class="max-w-sm text-sm leading-relaxed text-ink-soft">
+      Un perfume cambia con el tiempo: primero se sienten las notas de salida, luego el corazón y al
+      final el fondo, que es lo que queda en la piel.
+    </p>
+    <svg
+      viewBox="0 0 240 210"
+      class="mt-2 hidden w-48 text-ink lg:block"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+    >
+      <polygon points="120,1 239,209 1,209" />
+      <polygon points="120,1 160,70 80,70" fill="#8e1b24" stroke="none" />
+      <line x1="80" y1="70" x2="160" y2="70" />
+      <line x1="40" y1="140" x2="200" y2="140" />
+    </svg>
+  </div>
+
+  <ol class="flex flex-col">
+    {tiers.map((tier, i) => (
+      <li class="grid gap-3 border-t border-line py-7 last:border-b sm:grid-cols-[9rem_1fr] sm:gap-8">
+        <div class="flex flex-col gap-1">
+          <span class="price text-xs text-crimson">0{i + 1}</span>
+          <h3 class="eyebrow font-sans! text-ink">{tier.name}</h3>
+          <span class="text-xs text-ink-soft">{tier.when}</span>
+        </div>
+        <p class="font-display text-xl leading-snug text-ink first-letter:uppercase sm:text-2xl">
+          {tier.items.join(' · ')}
+        </p>
+      </li>
+    ))}
+  </ol>
+</section>

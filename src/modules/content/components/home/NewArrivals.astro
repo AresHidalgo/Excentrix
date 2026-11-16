@@ -1,0 +1,25 @@
+---
+import { routes } from '@shared/config/routes';
+import Container from '@shared/ui/Container.astro';
+import SectionHeading from '@shared/ui/SectionHeading.astro';
+import { ProductRow } from '@modules/catalog';
+import type { Perfume } from '@modules/product';
+
+interface Props {
+  perfumes: Perfume[];
+}
+
+const { perfumes } = Astro.props;
+---
+
+<section class="border-t border-line py-20 sm:py-28" aria-labelledby="nuevos-titulo">
+  <Container class="flex flex-col gap-12">
+    <SectionHeading
+      id="nuevos-titulo"
+      eyebrow="Recién llegados"
+      title="Nuevos lanzamientos"
+      link={{ href: routes.collection('nuevos-lanzamientos') }}
+    />
+    <ProductRow perfumes={perfumes} label="Nuevos lanzamientos" />
+  </Container>
+</section>
