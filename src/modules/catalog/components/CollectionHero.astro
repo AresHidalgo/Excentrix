@@ -1,0 +1,49 @@
+---
+import { routes } from '@shared/config/routes';
+import Container from '@shared/ui/Container.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  count: number;
+  eyebrow?: string;
+}
+
+const { title, description, count, eyebrow = 'Colección' } = Astro.props;
+---
+
+<header class="border-b border-line">
+  <Container class="flex flex-col gap-6 pt-8 pb-10 sm:pt-12 sm:pb-14 lg:pt-16">
+    <nav aria-label="Ruta de navegación">
+      <ol class="flex items-center gap-2 text-xs text-ink-soft">
+        <li>
+          <a href={routes.home} class="hover:text-ink">
+            Inicio
+          </a>
+        </li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="text-ink">
+          {title}
+        </li>
+      </ol>
+    </nav>
+    <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+      <div class="flex max-w-2xl flex-col gap-4">
+        <p class="eyebrow flex items-center gap-3 text-ink-soft">
+          <span aria-hidden="true" class="h-px w-8 bg-crimson"></span>
+          {eyebrow}
+        </p>
+        <h1 class="text-5xl leading-none sm:text-6xl lg:text-7xl">{title}</h1>
+        {description && (
+          <p class="max-w-xl text-base leading-relaxed text-ink-soft">{description}</p>
+        )}
+      </div>
+      <p class="eyebrow shrink-0 text-ink-soft">
+        <span class="price font-display text-2xl tracking-normal text-ink normal-case">
+          {count}
+        </span>
+        {count === 1 ? ' perfume' : ' perfumes'}
+      </p>
+    </div>
+  </Container>
+</header>

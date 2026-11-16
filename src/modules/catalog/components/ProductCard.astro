@@ -1,0 +1,119 @@
+---
+import { routes } from '@shared/config/routes';
+import { formatPrice } from '@shared/lib/format';
+import Icon from '@shared/ui/Icon.astro';
+import {
+  availableVariants,
+  cheapestVariant,
+  PerfumeBadges,
+  perfumeAlt,
+  ProductImage,
+  variantOnSale,
+  type Perfume,
+} from '@modules/product';
+import {
+  buildAvailabilityMessage,
+  buildWhatsAppMessage,
+  buildWhatsAppUrl,
+  WHATSAPP_PHONE,
+} from '@modules/whatsapp';
+
+interface Props {
+  perfume: Perfume;
+  loading?: 'lazy' | 'eager';
+  /** Clase extra del <li> (por ejemplo, ancho fijo en filas con scroll horizontal). */
+  class?: string;
+}
+
+const { perfume, loading = 'lazy', class: className } = Astro.props;
+const href = routes.perfume(perfume.slug);
+const url = new URL(href, Astro.site).href;
+const available = availableVariants(perfume);
+const cheapest = cheapestVariant(perfume);
+const soldOut = cheapest === null;
+const onSale = cheapest !== null && variantOnSale(cheapest);
+const alt = perfumeAlt(perfume.name, perfume.brand);
+
+// Acceso rápido (PLAN §5): con un solo tamaño va directo a WhatsApp; con varios, a la ficha.
+const quick = soldOut
+  ? {
+      href: buildWhatsAppUrl(WHATSAPP_PHONE, buildAvailabilityMessage(perfume, url)),
+      label: 'Preguntar disponibilidad',
+      external: true,
+    }
+  : available.length === 1 && cheapest
+    ? {
+        href: buildWhatsAppUrl(
+          WHATSAPP_PHONE,
+          buildWhatsAppMessage({ perfume, variant: cheapest, url }),
+        ),
+        label: 'Comprar por WhatsApp',
+        external: true,
+      }
+    : { href, label: `Elegir entre ${available.length} presentaciones`, external: false };
+---
+
+<li class:list={['group/card relative', className]} data-slug={perfume.slug}>
+  <article class="relative flex h-full flex-col bg-white">
+    <div class="relative overflow-hidden">
+      <div
+        class:list={[
+          'transition-opacity duration-500 ease-(--ease-luxe)',
+          soldOut ? 'opacity-50 grayscale' : 'group-hover/card:opacity-0',
+        ]}
+      >
+        <ProductImage alt={alt} shape={perfume.shape} loading={loading} />
+      </div>
+      {!soldOut && (
+        <div
+          aria-hidden="true"
+          class="absolute inset-0 opacity-0 transition-opacity duration-500 ease-(--ease-luxe) group-hover/card:opacity-100"
+        >
+          <ProductImage alt="" shape={perfume.shape} variant="detalle" loading="lazy" />
+        </div>
+      )}
+      <PerfumeBadges perfume={perfume} class="absolute top-3 left-3 z-10 flex-col items-start" />
+    </div>
+
+    <div class="flex flex-1 flex-col gap-2 border-t border-line px-3 pt-4 pb-3 sm:px-4">
+      <p class="eyebrow truncate text-[10px] text-ink-soft">{perfume.brand}</p>
+      <h3 class="font-display text-base leading-snug sm:text-lg">
+        <a
+          href={href}
+          class="decoration-crimson underline-offset-4 group-hover/card:underline after:absolute after:inset-0 after:content-['']"
+        >
+          {perfume.name}
+        </a>
+      </h3>
+      <p class="price mt-auto flex flex-wrap items-baseline gap-x-2 text-sm">
+        {soldOut ? (
+          <span class="text-ink-soft">Agotado</span>
+        ) : (
+          <>
+            {available.length > 1 && <span class="text-xs text-ink-soft">Desde</span>}
+            <span class:list={['font-medium', onSale ? 'text-crimson' : 'text-ink']}>
+              {formatPrice(cheapest.price)}
+            </span>
+            {onSale && cheapest.compareAtPrice !== null && (
+              <s class="text-xs text-ink-soft">
+                <span class="sr-only">Antes </span>
+                {formatPrice(cheapest.compareAtPrice)}
+              </s>
+            )}
+          </>
+        )}
+      </p>
+      <a
+        href={quick.href}
+        target={quick.external ? '_blank' : undefined}
+        rel={quick.external ? 'noopener noreferrer' : undefined}
+        class="relative z-10 -mx-1 mt-1 inline-flex items-center gap-2 self-start px-1 py-1 text-[11px] font-medium tracking-[0.12em] text-ink uppercase transition-colors hover:text-crimson"
+        data-whatsapp={quick.external ? '' : undefined}
+      >
+        <Icon name={quick.external ? 'whatsapp' : 'arrow-right'} size={14} />
+        <span class="sr-only">{perfume.name}: </span>
+        <span class="line-clamp-1">{quick.label}</span>
+      </a>
+    </div>
+  </article>
+</li>

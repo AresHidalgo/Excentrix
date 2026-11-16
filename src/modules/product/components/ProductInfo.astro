@@ -1,0 +1,42 @@
+---
+import { CONCENTRATION_LABEL } from '../lib/labels';
+import type { Perfume } from '../schemas';
+import PerfumeBadges from './PerfumeBadges.astro';
+import PurchasePanel from './PurchasePanel.astro';
+
+interface Props {
+  perfume: Perfume;
+}
+
+const { perfume } = Astro.props;
+---
+
+<div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-4">
+    <p class="eyebrow text-ink-soft">{perfume.brand}</p>
+    <h1 class="text-4xl leading-[1.05] sm:text-5xl">{perfume.name}</h1>
+    <p class="text-sm text-ink-soft">
+      {CONCENTRATION_LABEL[perfume.concentration]} · {perfume.olfactoryFamily.join(' · ')}
+    </p>
+    <PerfumeBadges perfume={perfume} />
+  </div>
+
+  <hr class="h-px border-0 bg-line" />
+
+  <PurchasePanel perfume={perfume} />
+
+  <ul class="grid gap-3 border-t border-line pt-6 text-xs text-ink-soft sm:grid-cols-3">
+    <li class="flex flex-col gap-1">
+      <span class="eyebrow text-[10px] text-ink">Originales</span>
+      Frascos sellados o tester, siempre originales.
+    </li>
+    <li class="flex flex-col gap-1">
+      <span class="eyebrow text-[10px] text-ink">Decants al momento</span>
+      Envasados del frasco original en atomizador de vidrio.
+    </li>
+    <li class="flex flex-col gap-1">
+      <span class="eyebrow text-[10px] text-ink">Envíos</span>A toda Colombia. Coordinamos por
+      WhatsApp.
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '@shared/layouts/BaseLayout.astro';
+import { AdminShell, AdminSummary, PerfumeEditForm, PerfumeTable } from '@modules/admin';
+import { getMockPerfumes } from '@modules/catalog';
+
+const perfumes = getMockPerfumes();
+---
+
+<BaseLayout title="Admin (maqueta)" noindex>
+  <AdminShell active="Perfumes" title="Perfumes">
+    <AdminSummary perfumes={perfumes} />
+    <PerfumeTable perfumes={perfumes} />
+    <PerfumeEditForm perfume={perfumes[0]!} />
+  </AdminShell>
+</BaseLayout>

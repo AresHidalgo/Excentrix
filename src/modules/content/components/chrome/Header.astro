@@ -1,0 +1,184 @@
+---
+import { routes } from '@shared/config/routes';
+import Container from '@shared/ui/Container.astro';
+import Icon from '@shared/ui/Icon.astro';
+import type { MenuItem } from '@modules/catalog';
+import { buildWhatsAppUrl, WHATSAPP_PHONE } from '@modules/whatsapp';
+import MobileNav from './MobileNav.tsx';
+
+interface Props {
+  menu: MenuItem[];
+  currentPath: string;
+}
+
+const { menu, currentPath } = Astro.props;
+const whatsappHref = buildWhatsAppUrl(WHATSAPP_PHONE, 'Hola Excentrix, quiero hacer una consulta.');
+const isCurrent = (href?: string) => href === currentPath;
+const linkBase =
+  "eyebrow relative inline-flex items-center gap-1 py-2 text-[11px] text-ink transition-colors hover:text-crimson after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-crimson after:transition-transform after:duration-300 after:content-[''] hover:after:scale-x-100 aria-[current=page]:after:scale-x-100";
+---
+
+<header class="group/header sticky top-0 z-40 border-b border-line bg-paper" data-site-header>
+  <Container class="flex h-16 items-center justify-between gap-4 transition-[height] duration-500 ease-(--ease-luxe) group-data-[compact=true]/header:h-14 xl:h-20 xl:group-data-[compact=true]/header:h-16">
+    <div class="flex items-center gap-1 xl:hidden">
+      <MobileNav
+        client:media="(max-width: 1279px)"
+        menu={menu}
+        currentPath={currentPath}
+        homeHref={routes.home}
+        whatsappHref={whatsappHref}
+      />
+    </div>
+
+    <a href={routes.home} class="mr-auto shrink-0 xl:mr-0">
+      <img
+        src="/brand/logo-horizontal.svg"
+        alt="Excentrix Perfumería"
+        width="1462"
+        height="425"
+        class="h-10 w-auto transition-[height] duration-500 ease-(--ease-luxe) group-data-[compact=true]/header:h-8 xl:h-12 xl:group-data-[compact=true]/header:h-10"
+      />
+    </a>
+
+    <nav aria-label="Principal" class="hidden xl:block">
+      <ul class="flex items-center gap-6 2xl:gap-8">
+        {menu.map((item, index) =>
+          item.children ? (
+            <li class="relative" data-dropdown>
+              <button
+                type="button"
+                class:list={[linkBase, 'group/trigger']}
+                aria-expanded="false"
+                aria-controls={`menu-${index}`}
+                data-dropdown-trigger
+              >
+                {item.label}
+                <Icon
+                  name="chevron-down"
+                  size={14}
+                  class="transition-transform duration-300 group-aria-expanded/trigger:rotate-180"
+                />
+              </button>
+              <ul
+                id={`menu-${index}`}
+                hidden
+                class="absolute top-full left-1/2 mt-2 min-w-48 -translate-x-1/2 animate-fade-in border border-line bg-white py-2"
+                data-dropdown-panel
+              >
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      aria-current={isCurrent(child.href) ? 'page' : undefined}
+                      class="eyebrow block px-5 py-3 text-[11px] text-ink transition-colors hover:bg-paper hover:text-crimson aria-[current=page]:text-crimson"
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li>
+              <a
+                href={item.href}
+                class={linkBase}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ),
+        )}
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="-mr-2 grid size-11 place-items-center text-ink transition-colors hover:text-crimson"
+      aria-label="Buscar"
+      aria-expanded="false"
+      aria-controls="buscador"
+      data-search-toggle
+    >
+      <Icon name="search" size={22} />
+    </button>
+  </Container>
+
+  <div id="buscador" hidden class="animate-fade-in border-t border-line bg-paper" data-search-panel>
+    <Container class="py-4">
+      <form action={routes.search} method="get" role="search" class="flex items-center gap-3">
+        <label for="buscar-q" class="sr-only">
+          Buscar perfumes
+        </label>
+        <Icon name="search" size={20} class="text-ink-soft" />
+        <input
+          id="buscar-q"
+          name="q"
+          type="search"
+          placeholder="Busca por perfume, marca o nota"
+          autocomplete="off"
+          class="h-12 flex-1 border-0 border-b border-line bg-transparent font-display text-xl text-ink placeholder:text-ink-soft/70 focus:border-ink focus:outline-none sm:text-2xl"
+        />
+        <button type="submit" class="eyebrow hidden text-ink hover:text-crimson sm:inline">
+          Buscar
+        </button>
+      </form>
+    </Container>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+
+  if (header) {
+    // Compactar al hacer scroll
+    const onScroll = () => {
+      header.dataset.compact = String(window.scrollY > 32);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Desplegable "Género" (clic, hover con mouse, Escape y clic afuera)
+    for (const dropdown of header.querySelectorAll<HTMLElement>('[data-dropdown]')) {
+      const trigger = dropdown.querySelector<HTMLButtonElement>('[data-dropdown-trigger]');
+      const panel = dropdown.querySelector<HTMLElement>('[data-dropdown-panel]');
+      if (!trigger || !panel) continue;
+      const setOpen = (open: boolean) => {
+        trigger.setAttribute('aria-expanded', String(open));
+        panel.hidden = !open;
+      };
+      trigger.addEventListener('click', () => setOpen(panel.hidden === true));
+      dropdown.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && setOpen(true));
+      dropdown.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && setOpen(false));
+      dropdown.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !panel.hidden) {
+          setOpen(false);
+          trigger.focus();
+        }
+      });
+      dropdown.addEventListener('focusout', (e) => {
+        if (!dropdown.contains(e.relatedTarget as Node | null)) setOpen(false);
+      });
+    }
+
+    // Buscador desplegable
+    const toggle = header.querySelector<HTMLButtonElement>('[data-search-toggle]');
+    const panel = header.querySelector<HTMLElement>('[data-search-panel]');
+    if (toggle && panel) {
+      toggle.addEventListener('click', () => {
+        const open = panel.hidden;
+        panel.hidden = !open;
+        toggle.setAttribute('aria-expanded', String(open));
+        if (open) panel.querySelector('input')?.focus();
+      });
+      panel.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          panel.hidden = true;
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.focus();
+        }
+      });
+    }
+  }
+</script>

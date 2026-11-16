@@ -1,0 +1,92 @@
+---
+import { formatPrice } from '@shared/lib/format';
+import { HOUSE_LABEL, isAvailable, priceFrom, type Perfume } from '@modules/product';
+
+interface Props {
+  perfumes: Perfume[];
+}
+
+const { perfumes } = Astro.props;
+const status = (p: Perfume, i: number) =>
+  i === 3
+    ? { label: 'Borrador', cls: 'border border-line text-ink-soft' }
+    : !isAvailable(p)
+      ? { label: 'Agotado', cls: 'bg-line text-ink-soft' }
+      : { label: 'Publicado', cls: 'bg-ink text-white' };
+---
+
+<section class="border border-line bg-white" aria-labelledby="tabla-titulo">
+  <div class="flex flex-col gap-3 border-b border-line p-4 sm:flex-row sm:items-center sm:justify-between">
+    <h2 id="tabla-titulo" class="font-sans! text-base font-semibold tracking-normal">
+      Perfumes
+    </h2>
+    <div class="flex gap-2">
+      <input
+        type="search"
+        placeholder="Buscar por nombre o marca"
+        aria-label="Buscar perfumes"
+        class="h-9 w-full border border-line px-3 text-sm sm:w-64"
+      />
+      <button
+        type="button"
+        class="h-9 shrink-0 rounded-[2px] bg-ink px-4 text-xs font-medium tracking-wider text-white uppercase"
+      >
+        Nuevo
+      </button>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[44rem] text-left text-sm">
+      <thead class="text-xs text-ink-soft">
+        <tr class="border-b border-line">
+          <th scope="col" class="px-4 py-3 font-medium">
+            Perfume
+          </th>
+          <th scope="col" class="px-4 py-3 font-medium">
+            Casa
+          </th>
+          <th scope="col" class="px-4 py-3 font-medium">
+            Presentaciones
+          </th>
+          <th scope="col" class="px-4 py-3 text-right font-medium">
+            Desde
+          </th>
+          <th scope="col" class="px-4 py-3 font-medium">
+            Estado
+          </th>
+          <th scope="col" class="px-4 py-3">
+            <span class="sr-only">Acciones</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {perfumes.map((p, i) => {
+          const s = status(p, i);
+          return (
+            <tr class="border-b border-line last:border-0 hover:bg-paper">
+              <td class="px-4 py-3">
+                <span class="block font-medium">{p.name}</span>
+                <span class="text-xs text-ink-soft">{p.brand}</span>
+              </td>
+              <td class="px-4 py-3">{HOUSE_LABEL[p.house]}</td>
+              <td class="px-4 py-3 text-ink-soft">
+                {p.variants.map((v) => `${v.ml}`).join(' · ')} ml
+              </td>
+              <td class="price px-4 py-3 text-right">{formatPrice(priceFrom(p))}</td>
+              <td class="px-4 py-3">
+                <span class:list={['inline-flex px-2 py-1 text-[11px] font-medium', s.cls]}>
+                  {s.label}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right">
+                <a href="#editar" class="text-xs underline underline-offset-4">
+                  Editar
+                </a>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+</section>

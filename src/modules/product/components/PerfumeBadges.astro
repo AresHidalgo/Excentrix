@@ -1,0 +1,23 @@
+---
+import Badge from '@shared/ui/Badge.astro';
+import { getPerfumeBadges } from '../lib/badges';
+import type { Perfume } from '../schemas';
+
+interface Props {
+  perfume: Perfume;
+  class?: string;
+}
+
+const { perfume, class: className } = Astro.props;
+const badges = getPerfumeBadges(perfume);
+---
+
+{badges.length > 0 && (
+  <ul class:list={['flex flex-wrap gap-1.5', className]} aria-label="Etiquetas">
+    {badges.map((b) => (
+      <li>
+        <Badge tone={b.tone}>{b.label}</Badge>
+      </li>
+    ))}
+  </ul>
+)}

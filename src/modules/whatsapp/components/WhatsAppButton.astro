@@ -1,0 +1,36 @@
+---
+import Icon from '@shared/ui/Icon.astro';
+import { buttonClass, type ButtonSize, type ButtonVariant } from '@shared/ui/styles';
+import { WHATSAPP_GENERAL_MESSAGE, WHATSAPP_PHONE } from '../lib/config';
+import { buildWhatsAppUrl } from '../lib/message';
+
+interface Props {
+  /** Mensaje ya armado (buildWhatsAppMessage). Si falta, abre una consulta general. */
+  message?: string;
+  label?: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  class?: string;
+}
+
+const {
+  message = WHATSAPP_GENERAL_MESSAGE,
+  label = 'Comprar por WhatsApp',
+  variant = 'accent',
+  size = 'lg',
+  class: className,
+} = Astro.props;
+const href = buildWhatsAppUrl(WHATSAPP_PHONE, message);
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class={buttonClass(variant, size, className)}
+  data-whatsapp
+>
+  <Icon name="whatsapp" size={18} />
+  <span>{label}</span>
+  <span class="sr-only">(se abre WhatsApp en una pestaña nueva)</span>
+</a>

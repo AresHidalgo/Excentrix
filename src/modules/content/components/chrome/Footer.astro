@@ -1,0 +1,120 @@
+---
+import { routes } from '@shared/config/routes';
+import Container from '@shared/ui/Container.astro';
+import Icon from '@shared/ui/Icon.astro';
+import type { MenuItem } from '@modules/catalog';
+import { buildWhatsAppUrl, WHATSAPP_PHONE } from '@modules/whatsapp';
+import type { SiteSettings } from '../../schemas';
+
+interface Props {
+  menu: MenuItem[];
+  social: SiteSettings['social'];
+}
+
+const { menu, social } = Astro.props;
+const collections = menu.flatMap((item) => item.children ?? [item]);
+const help = [
+  { label: 'Cómo comprar', href: routes.page('como-comprar') },
+  { label: '¿Qué es un decant?', href: routes.page('que-es-un-decant') },
+  { label: 'Envíos', href: routes.page('envios') },
+  { label: 'Términos y condiciones', href: routes.page('terminos') },
+  { label: 'Política de privacidad', href: routes.page('privacidad') },
+];
+const whatsappHref = buildWhatsAppUrl(WHATSAPP_PHONE, 'Hola Excentrix, quiero hacer una consulta.');
+const linkClass = 'text-sm text-white/70 transition-colors hover:text-white';
+---
+
+<footer class="bg-ink text-white">
+  <Container class="grid gap-12 py-16 sm:py-20 lg:grid-cols-12 lg:gap-10">
+    <div class="flex flex-col gap-6 lg:col-span-4">
+      <a href={routes.home} class="self-start">
+        <img
+          src="/brand/logo-horizontal-negativo.svg"
+          alt="Excentrix Perfumería"
+          width="1462"
+          height="425"
+          loading="lazy"
+          class="h-12 w-auto"
+        />
+      </a>
+      <p class="max-w-xs text-sm leading-relaxed text-white/70">
+        Perfumes de nicho, diseñador y árabes, en frasco completo y en decants. Originales, con
+        compra directa por WhatsApp.
+      </p>
+      <ul class="flex gap-2" aria-label="Redes sociales">
+        <li>
+          <a
+            href={social.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="grid size-10 place-items-center border border-white/20 text-white transition-colors hover:border-white"
+          >
+            <Icon name="instagram" size={18} label="Instagram" />
+          </a>
+        </li>
+        <li>
+          <a
+            href={social.tiktok}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="grid size-10 place-items-center border border-white/20 text-white transition-colors hover:border-white"
+          >
+            <Icon name="tiktok" size={16} label="TikTok" />
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <nav aria-labelledby="footer-colecciones" class="lg:col-span-3">
+      <h2 id="footer-colecciones" class="eyebrow mb-5 font-sans! text-[11px] text-crimson-light">
+        Colecciones
+      </h2>
+      <ul class="grid grid-cols-2 gap-x-6 gap-y-3 lg:grid-cols-1">
+        {collections.map((c) => (
+          <li>
+            <a href={c.href} class={linkClass}>
+              {c.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="footer-ayuda" class="lg:col-span-2">
+      <h2 id="footer-ayuda" class="eyebrow mb-5 font-sans! text-[11px] text-crimson-light">
+        Ayuda
+      </h2>
+      <ul class="flex flex-col gap-3">
+        {help.map((h) => (
+          <li>
+            <a href={h.href} class={linkClass}>
+              {h.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex flex-col gap-4 lg:col-span-3">
+      <h2 class="eyebrow mb-1 font-sans! text-[11px] text-crimson-light">Contacto</h2>
+      <a
+        href={whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-3 self-start border-b border-white/30 pb-1 text-sm text-white transition-colors hover:border-white"
+      >
+        <Icon name="whatsapp" size={18} />
+        Escríbenos por WhatsApp
+      </a>
+      <p class="text-sm text-white/70">Lunes a sábado, 9:00 a. m. – 7:00 p. m.</p>
+      <p class="text-sm text-white/70">Envíos a toda Colombia.</p>
+    </div>
+  </Container>
+
+  <div class="border-t border-white/10">
+    <Container class="flex flex-col gap-2 py-6 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
+      <p>© 2026 Excentrix Perfumería. Todos los derechos reservados.</p>
+      <p>Precios en pesos colombianos (COP), impuestos incluidos.</p>
+    </Container>
+  </div>
+</footer>

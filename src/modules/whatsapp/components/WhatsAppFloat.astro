@@ -1,0 +1,24 @@
+---
+import Icon from '@shared/ui/Icon.astro';
+import { WHATSAPP_GENERAL_MESSAGE, WHATSAPP_PHONE } from '../lib/config';
+import { buildWhatsAppUrl } from '../lib/message';
+
+interface Props {
+  message?: string;
+}
+
+const { message = WHATSAPP_GENERAL_MESSAGE } = Astro.props;
+const href = buildWhatsAppUrl(WHATSAPP_PHONE, message);
+---
+
+<!-- Único lugar del sitio donde se usa el verde de WhatsApp (#25D366). -->
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Escríbenos por WhatsApp (se abre en una pestaña nueva)"
+  class="fixed right-4 bottom-4 z-30 grid size-14 place-items-center rounded-full bg-whatsapp text-white shadow-[0_6px_20px_rgb(14_14_14/0.18)] transition-transform duration-300 ease-(--ease-luxe) hover:-translate-y-0.5 sm:right-6 sm:bottom-6"
+  data-whatsapp
+>
+  <Icon name="whatsapp" size={28} />
+</a>

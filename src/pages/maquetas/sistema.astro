@@ -1,0 +1,308 @@
+---
+import BaseLayout from '@shared/layouts/BaseLayout.astro';
+import Badge from '@shared/ui/Badge.astro';
+import Button from '@shared/ui/Button.astro';
+import Container from '@shared/ui/Container.astro';
+import Divider from '@shared/ui/Divider.astro';
+import Icon from '@shared/ui/Icon.astro';
+import SectionHeading from '@shared/ui/SectionHeading.astro';
+import { ICONS, type IconName } from '@shared/ui/icons';
+import { formatPrice } from '@shared/lib/format';
+import { routes } from '@shared/config/routes';
+import {
+  EmptyState,
+  getMockPerfumeBySlug,
+  getMockPerfumes,
+  ProductGrid,
+  ProductGridSkeleton,
+} from '@modules/catalog';
+import { ProductImage, PurchasePanel, type BottleShape } from '@modules/product';
+import { WhatsAppButton } from '@modules/whatsapp';
+
+const palette = [
+  {
+    name: 'paper',
+    hex: '#F7F5F2',
+    use: 'Fondo principal · 60 %',
+    cls: 'bg-paper border border-line',
+  },
+  {
+    name: 'white',
+    hex: '#FFFFFF',
+    use: 'Tarjetas y superficies',
+    cls: 'bg-white border border-line',
+  },
+  {
+    name: 'ink',
+    hex: '#0E0E0E',
+    use: 'Texto, header, footer, secciones oscuras · 30 %',
+    cls: 'bg-ink',
+  },
+  { name: 'ink-soft', hex: '#5E5A57', use: 'Texto secundario', cls: 'bg-ink-soft' },
+  { name: 'line', hex: '#E4E0DB', use: 'Bordes y divisores de 1 px', cls: 'bg-line' },
+  {
+    name: 'crimson',
+    hex: '#8E1B24',
+    use: 'CTAs, precio en oferta, reglas · 10 %',
+    cls: 'bg-crimson',
+  },
+  {
+    name: 'crimson-hover',
+    hex: '#A8222D',
+    use: 'Hover de botones carmesí',
+    cls: 'bg-crimson-hover',
+  },
+  {
+    name: 'crimson-light',
+    hex: '#C8323E',
+    use: 'Texto de acento sobre tinta',
+    cls: 'bg-crimson-light',
+  },
+  { name: 'whatsapp', hex: '#25D366', use: 'Solo el botón flotante', cls: 'bg-whatsapp' },
+];
+
+const type = [
+  { label: 'Display · Lora 500', cls: 'font-display text-6xl sm:text-7xl', sample: 'Tu firma' },
+  { label: 'H1 · Lora', cls: 'font-display text-5xl', sample: 'Baccarat Rouge 540' },
+  { label: 'H2 · Lora', cls: 'font-display text-4xl', sample: 'Nuevos lanzamientos' },
+  { label: 'H3 · Lora', cls: 'font-display text-2xl', sample: 'Pirámide olfativa' },
+  {
+    label: 'Cuerpo · Montserrat 400',
+    cls: 'text-base',
+    sample: 'Frascos originales y decants para probar antes de decidir.',
+  },
+  {
+    label: 'Secundario · Montserrat',
+    cls: 'text-sm text-ink-soft',
+    sample: 'Entrega estimada: 8 a 15 días hábiles.',
+  },
+  { label: 'Etiqueta · .eyebrow', cls: 'eyebrow', sample: 'Perfumería de nicho' },
+  {
+    label: 'Precio · cifras tabulares',
+    cls: 'price text-2xl font-medium',
+    sample: formatPrice(1290000),
+  },
+];
+
+const shapes: BottleShape[] = ['tall', 'round', 'faceted', 'oud'];
+const sample = getMockPerfumes().slice(0, 4);
+const withSoldOut = getMockPerfumeBySlug('hawas-for-him-rasasi');
+const soldOut = getMockPerfumeBySlug('naxos-xerjoff');
+const cards = [
+  getMockPerfumeBySlug('asad-lattafa'),
+  getMockPerfumeBySlug('baccarat-rouge-540-mfk'),
+  getMockPerfumeBySlug('angels-share-kilian'),
+  soldOut,
+].filter((p) => p !== undefined);
+const sections = [
+  ['color', 'Color'],
+  ['tipografia', 'Tipografía'],
+  ['botones', 'Botones'],
+  ['insignias', 'Insignias'],
+  ['iconos', 'Íconos'],
+  ['imagen', 'Imagen de producto'],
+  ['tarjetas', 'Tarjetas'],
+  ['selector', 'Selector'],
+  ['estados', 'Estados'],
+];
+---
+
+<BaseLayout title="Sistema de diseño (maqueta)" noindex>
+  <header class="bg-ink text-white">
+    <Container class="flex flex-col gap-6 py-14 sm:py-20">
+      <a href="/maquetas" class="eyebrow text-[10px] text-white/60 hover:text-white">
+        ← Maquetas
+      </a>
+      <img
+        src="/brand/logo-horizontal-negativo.svg"
+        alt="Excentrix Perfumería"
+        width="1462"
+        height="425"
+        class="h-12 w-auto self-start"
+      />
+      <h1 class="text-5xl text-white sm:text-6xl">Sistema de diseño</h1>
+      <p class="max-w-xl text-white/70">
+        Editorial de lujo: Lora para títulos, Montserrat para la interfaz, mucho espacio, líneas de
+        1 px y carmesí solo como acento.
+      </p>
+      <nav aria-label="Secciones">
+        <ul class="flex flex-wrap gap-x-6 gap-y-2">
+          {sections.map(([id, label]) => (
+            <li>
+              <a href={`#${id}`} class="eyebrow text-[10px] text-white/70 hover:text-white">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </Container>
+  </header>
+
+  <main>
+    <Container as="section" class="flex flex-col gap-10 py-16" id="color">
+      <SectionHeading
+        eyebrow="Tokens"
+        title="Color"
+        description="Regla 60 / 30 / 10: papel, tinta y carmesí."
+      />
+      <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {palette.map((c) => (
+          <li class="flex flex-col gap-3 bg-white p-3">
+            <span class:list={['block aspect-[4/3]', c.cls]} />
+            <span class="text-sm font-medium">{c.name}</span>
+            <span class="price text-xs text-ink-soft">{c.hex}</span>
+            <span class="text-xs leading-relaxed text-ink-soft">{c.use}</span>
+          </li>
+        ))}
+      </ul>
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="tipografia">
+      <SectionHeading
+        eyebrow="Tokens"
+        title="Tipografía"
+        description="Escala modular 1.25. Mayúsculas espaciadas (0.28 em) para etiquetas."
+      />
+      <dl class="flex flex-col divide-y divide-line border-y border-line">
+        {type.map((t) => (
+          <div class="grid gap-2 py-6 sm:grid-cols-[14rem_1fr] sm:items-baseline">
+            <dt class="text-xs text-ink-soft">{t.label}</dt>
+            <dd class={t.cls}>{t.sample}</dd>
+          </div>
+        ))}
+      </dl>
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="botones">
+      <SectionHeading eyebrow="Componentes" title="Botones" />
+      <div class="flex flex-wrap items-center gap-4">
+        <Button>Primario</Button>
+        <Button variant="accent">Acento</Button>
+        <Button variant="outline">Contorno</Button>
+        <Button variant="link">Enlace</Button>
+        <Button disabled>Deshabilitado</Button>
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <Button size="sm">Pequeño</Button>
+        <Button size="md">Mediano</Button>
+        <Button size="lg">Grande</Button>
+        <WhatsAppButton />
+      </div>
+      <div class="flex flex-wrap items-center gap-4 bg-ink p-6">
+        <Button variant="accent">Explorar colección</Button>
+        <Button variant="outline-light">Sobre tinta</Button>
+      </div>
+      <Divider variant="accent" />
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="insignias">
+      <SectionHeading eyebrow="Componentes" title="Insignias" />
+      <div class="flex flex-wrap gap-3">
+        <Badge tone="ink">Nuevo</Badge>
+        <Badge tone="accent">-10&nbsp;%</Badge>
+        <Badge tone="outline">Bajo encargo</Badge>
+        <Badge tone="paper">Preventa</Badge>
+        <Badge tone="muted">Agotado</Badge>
+      </div>
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="iconos">
+      <SectionHeading
+        eyebrow="Componentes"
+        title="Íconos"
+        description="SVG en línea, trazo de 1,5 px."
+      />
+      <ul class="flex flex-wrap gap-3">
+        {(Object.keys(ICONS) as IconName[]).map((name) => (
+          <li class="flex w-24 flex-col items-center gap-2 bg-white p-4">
+            <Icon name={name} size={24} />
+            <span class="text-[10px] text-ink-soft">{name}</span>
+          </li>
+        ))}
+      </ul>
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="imagen">
+      <SectionHeading
+        eyebrow="Componentes"
+        title="Imagen de producto"
+        description="4:5 sobre blanco. Siluetas de reemplazo hasta tener fotos de Cloudinary."
+      />
+      <ul class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {shapes.map((s) => (
+          <li class="flex flex-col gap-2">
+            <ProductImage alt={`Silueta ${s}`} shape={s} />
+            <span class="text-xs text-ink-soft">{s}</span>
+          </li>
+        ))}
+      </ul>
+      <ul class="grid grid-cols-3 gap-4 md:w-2/3">
+        {(['principal', 'detalle', 'ambiente'] as const).map((v) => (
+          <li class="flex flex-col gap-2">
+            <ProductImage alt={`Variante ${v}`} shape="faceted" variant={v} />
+            <span class="text-xs text-ink-soft">{v}</span>
+          </li>
+        ))}
+      </ul>
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="tarjetas">
+      <SectionHeading
+        eyebrow="Catálogo"
+        title="Tarjetas"
+        description="Oferta, bajo encargo, preventa y agotado."
+      />
+      <ProductGrid perfumes={cards} label="Ejemplos de tarjetas" />
+      <ProductGrid perfumes={sample} label="Más tarjetas" />
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="selector">
+      <SectionHeading
+        eyebrow="Ficha"
+        title="Selector de presentación"
+        description="Opción agotada deshabilitada; perfume agotado cambia el botón."
+      />
+      <div class="grid gap-10 lg:grid-cols-2">
+        {withSoldOut && (
+          <div class="flex flex-col gap-4 bg-white p-6">
+            <p class="eyebrow text-[10px] text-ink-soft">
+              Con un tamaño agotado · {withSoldOut.name}
+            </p>
+            <PurchasePanel perfume={withSoldOut} />
+          </div>
+        )}
+        {soldOut && (
+          <div class="flex flex-col gap-4 bg-white p-6">
+            <p class="eyebrow text-[10px] text-ink-soft">Totalmente agotado · {soldOut.name}</p>
+            <PurchasePanel perfume={soldOut} />
+          </div>
+        )}
+      </div>
+    </Container>
+
+    <Divider />
+
+    <Container as="section" class="flex flex-col gap-10 py-16" id="estados">
+      <SectionHeading eyebrow="Catálogo" title="Estados" />
+      <EmptyState
+        action={{ href: routes.collection('nuevos-lanzamientos'), label: 'Ver nuevos' }}
+      />
+      <ProductGridSkeleton count={4} />
+    </Container>
+  </main>
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import type { Perfume } from '@modules/product';
+import ProductCard from './ProductCard.astro';
+
+/** Fila de perfumes: scroll horizontal con snap en móvil, 4 columnas en escritorio. */
+interface Props {
+  perfumes: Perfume[];
+  label: string;
+}
+
+const { perfumes, label } = Astro.props;
+---
+
+<ul
+  aria-label={label}
+  class="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:gap-5 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden"
+>
+  {perfumes.map((p) => (
+    <ProductCard perfume={p} class="w-[68%] shrink-0 snap-start sm:w-[40%] lg:w-auto" />
+  ))}
+</ul>

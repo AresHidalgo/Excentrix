@@ -1,0 +1,57 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { routes } from '@shared/config/routes';
+import {
+  buildFacetGroups,
+  collectionCategories,
+  CollectionHero,
+  CollectionResults,
+  EmptyState,
+  getCollectionPerfumes,
+  getMockCategories,
+  getMockPerfumes,
+  ProductGrid,
+  toFacetItem,
+  type Category,
+} from '@modules/catalog';
+import { StoreLayout } from '@modules/content';
+import Container from '@shared/ui/Container.astro';
+
+export const getStaticPaths = (() =>
+  collectionCategories(getMockCategories()).map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+const perfumes = getCollectionPerfumes(getMockPerfumes(), category.slug);
+const items = perfumes.map(toFacetItem);
+const withSidebar = buildFacetGroups(items).length > 0;
+---
+
+<StoreLayout title={`${category.name} (maqueta)`} description={category.description} noindex>
+  <CollectionHero
+    title={category.name}
+    description={category.description}
+    count={perfumes.length}
+  />
+  <Container class="py-10 sm:py-14">
+    {perfumes.length > 0 ? (
+      <CollectionResults items={items}>
+        <ProductGrid perfumes={perfumes} withSidebar={withSidebar} label={category.name} />
+        <EmptyState slot="empty" />
+      </CollectionResults>
+    ) : (
+      <EmptyState
+        title="Pronto tendremos perfumes aquí"
+        message="Esta colección se está preparando. Mientras tanto, mira lo más nuevo."
+        showClear={false}
+        action={{ href: routes.collection('nuevos-lanzamientos'), label: 'Ver nuevos' }}
+      />
+    )}
+  </Container>
+</StoreLayout>
