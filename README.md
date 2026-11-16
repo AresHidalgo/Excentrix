@@ -165,26 +165,31 @@ src/
 
 ## Desarrollo local
 
-**Requisitos:** Node.js 22.23.4 o superior (el proyecto usa Node 24, ver [`.nvmrc`](.nvmrc)).
+**Requisitos:** Node.js 22.23.4 o superior (el proyecto usa Node 24, ver [`.nvmrc`](.nvmrc)) y
+**pnpm 10** (versión fijada en `packageManager` de `package.json`).
+
+> El proyecto usa pnpm, no npm. pnpm no ejecuta los scripts de instalación de las dependencias
+> sin autorización, y [`pnpm-workspace.yaml`](pnpm-workspace.yaml) bloquea versiones publicadas
+> hace menos de 24 horas y versiones con menos evidencia de procedencia que las anteriores.
 
 ```bash
 git clone https://github.com/AresHidalgo/Excentrix.git
 cd Excentrix
-npm install
+pnpm install
 cp .env.example .env
-npm run dev
+pnpm dev
 ```
 
 El sitio queda en `http://localhost:4321`.
 
-| Comando           | Acción                                  |
-| ----------------- | --------------------------------------- |
-| `npm run dev`     | Servidor de desarrollo                  |
-| `npm run build`   | Genera el sitio estático en `dist/`     |
-| `npm run preview` | Sirve el build localmente               |
-| `npm run check`   | Revisión de tipos de Astro y TypeScript |
-| `npm run lint`    | ESLint                                  |
-| `npm run format`  | Formatea con Prettier                   |
+| Comando        | Acción                                  |
+| -------------- | --------------------------------------- |
+| `pnpm dev`     | Servidor de desarrollo                  |
+| `pnpm build`   | Genera el sitio estático en `dist/`     |
+| `pnpm preview` | Sirve el build localmente               |
+| `pnpm check`   | Revisión de tipos de Astro y TypeScript |
+| `pnpm lint`    | ESLint                                  |
+| `pnpm format`  | Formatea con Prettier                   |
 
 > Las credenciales (`.env`, cuentas de servicio de Firebase) nunca se suben al repositorio.
 > En CI viven en GitHub Secrets.
