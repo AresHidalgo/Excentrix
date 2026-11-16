@@ -8,12 +8,22 @@ export type {
   MenuItem,
   SortKey,
 } from './schemas';
+// Datos de muestra: solo para la guía de estilo y la maqueta del admin (casos especiales).
 export {
   getMockBrands,
   getMockCategories,
   getMockPerfumeBySlug,
   getMockPerfumes,
 } from './data/mock';
+// Catálogo real de la tienda.
+export {
+  countCollection,
+  getBrands,
+  getCategories,
+  getPerfumeBySlug,
+  getPerfumes,
+} from './data/catalog';
+export { CATALOG_SIZES, getCatalogSizes, type CatalogSize } from './data/pricing';
 export {
   buildMenu,
   collectionCategories,

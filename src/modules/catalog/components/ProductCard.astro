@@ -32,7 +32,7 @@ const available = availableVariants(perfume);
 const cheapest = cheapestVariant(perfume);
 const soldOut = cheapest === null;
 const onSale = cheapest !== null && variantOnSale(cheapest);
-const alt = perfumeAlt(perfume.name, perfume.brand);
+const alt = perfumeAlt(perfume.name, perfume.brand, undefined, perfume.inspired);
 
 // Acceso rápido (PLAN §5): con un solo tamaño va directo a WhatsApp; con varios, a la ficha.
 const quick = soldOut
@@ -76,13 +76,17 @@ const quick = soldOut
     </div>
 
     <div class="flex flex-1 flex-col gap-2 border-t border-line px-3 pt-4 pb-3 sm:px-4">
-      <p class="eyebrow truncate text-[10px] text-ink-soft">{perfume.brand}</p>
+      <p class="eyebrow truncate text-[10px] text-ink-soft">
+        {perfume.inspired ? `Inspirado en · ${perfume.brand}` : perfume.brand}
+      </p>
       <h3 class="font-display text-base leading-snug sm:text-lg">
         <a
           href={href}
           class="decoration-crimson underline-offset-4 group-hover/card:underline after:absolute after:inset-0 after:content-['']"
         >
+          {perfume.inspired && <span class="sr-only">Inspirado en </span>}
           {perfume.name}
+          {perfume.inspired && <span class="sr-only"> de {perfume.brand}</span>}
         </a>
       </h3>
       <p class="price mt-auto flex flex-wrap items-baseline gap-x-2 text-sm">

@@ -1,0 +1,134 @@
+---
+/**
+ * Tarjeta Excentrix: programa de fidelidad.
+ * 7 frascos: los 6 primeros se completan con compras; el 7.º es cortesía (un perfume de 30 ml
+ * gratis). La tienda no tiene cuentas de cliente: el seguimiento se lleva por WhatsApp.
+ */
+import Container from '@shared/ui/Container.astro';
+import { WhatsAppButton } from '@modules/whatsapp';
+
+const PURCHASES = 6;
+const STAMPS = PURCHASES + 1;
+const steps = [
+  {
+    title: 'Suma un sello por compra',
+    text: 'Cada compra marca un frasco de tu tarjeta. Llevamos la cuenta contigo por WhatsApp.',
+  },
+  {
+    title: 'Completa 6 compras',
+    text: 'Seis frascos marcados y tu tarjeta queda lista para el canje.',
+  },
+  {
+    title: 'El 7.º es cortesía',
+    text: 'Canjeas tu perfume de 30 ml totalmente gratis.',
+  },
+];
+---
+
+<section
+  id="tarjeta-excentrix"
+  class="relative overflow-hidden bg-ink py-20 text-white sm:py-28"
+  aria-labelledby="tarjeta-titulo"
+>
+  <Container class="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-col gap-5">
+        <p class="eyebrow flex items-center gap-3 text-crimson-light">
+          <span class="h-px w-8 bg-crimson-light" aria-hidden="true"></span>
+          Tarjeta Excentrix
+        </p>
+        <h2 id="tarjeta-titulo" class="text-4xl leading-[1.05] text-white sm:text-5xl">
+          Canjea tu perfume de 30 ml{' '}
+          <em class="text-crimson-light not-italic">totalmente gratis</em>
+        </h2>
+        <p class="max-w-md text-base leading-relaxed text-white/70">
+          Un programa simple para quienes vuelven: completa seis compras y el séptimo frasco corre
+          por nuestra cuenta.
+        </p>
+      </div>
+
+      <ol class="grid gap-6 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+        {steps.map((step, i) => (
+          <li class="flex flex-col gap-2 border-t border-white/15 pt-4">
+            <span class="font-display text-3xl leading-none text-crimson-light">0{i + 1}</span>
+            <h3 class="text-lg text-white">{step.title}</h3>
+            <p class="text-sm leading-relaxed text-white/60">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+        <WhatsAppButton
+          label="Quiero mi tarjeta"
+          message="Hola Excentrix, quiero empezar mi Tarjeta Excentrix."
+          class="self-start"
+        />
+        <p class="text-xs text-white/50">Condiciones y canje por WhatsApp.</p>
+      </div>
+    </div>
+
+    <figure class="flex flex-col items-center gap-6">
+      <ul
+        class="flex w-full max-w-md flex-wrap justify-center gap-x-4 gap-y-6 sm:gap-x-6"
+        aria-label={`Tarjeta de ${STAMPS} frascos: ${PURCHASES} por completar con compras y el séptimo de cortesía`}
+      >
+        {Array.from({ length: STAMPS }, (_, i) => {
+          const gift = i === STAMPS - 1;
+          return (
+            <li class="flex w-[calc(25%-1rem)] flex-col items-center gap-2 sm:w-[calc(25%-1.125rem)]">
+              <svg
+                viewBox="0 0 48 64"
+                class:list={[
+                  'h-auto w-full max-w-16',
+                  gift ? 'text-crimson-light' : 'text-white/25',
+                ]}
+                aria-hidden="true"
+              >
+                <rect x="17" y="2" width="14" height="9" rx="1.5" fill="currentColor" />
+                <rect x="20" y="11" width="8" height="5" fill="currentColor" opacity="0.7" />
+                <rect
+                  x="6"
+                  y="16"
+                  width="36"
+                  height="46"
+                  rx="4"
+                  fill={gift ? 'currentColor' : 'none'}
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                />
+                {gift && (
+                  <text
+                    x="24"
+                    y="44"
+                    text-anchor="middle"
+                    font-size="11"
+                    font-weight="600"
+                    fill="#ffffff"
+                    font-family="Montserrat Variable, sans-serif"
+                  >
+                    30ml
+                  </text>
+                )}
+              </svg>
+              <span
+                class:list={[
+                  'text-[10px] tracking-[0.2em] uppercase',
+                  gift ? 'text-crimson-light' : 'text-white/40',
+                ]}
+              >
+                {gift ? 'Cortesía' : `0${i + 1}`}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <figcaption class="text-center text-sm text-white/70">
+        Completa <strong class="font-medium text-white">6</strong> con tus compras
+        <span class="mx-2 text-white/30" aria-hidden="true">
+          |
+        </span>
+        <strong class="font-medium text-white">7.º frasco:</strong> cortesía
+      </figcaption>
+    </figure>
+  </Container>
+</section>

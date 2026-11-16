@@ -4,6 +4,7 @@ export {
   buildAvailabilityMessage,
   buildWhatsAppMessage,
   buildWhatsAppUrl,
+  perfumeLine,
   variantLabel,
 } from './lib/message';
 export { default as WhatsAppButton } from './components/WhatsAppButton.astro';

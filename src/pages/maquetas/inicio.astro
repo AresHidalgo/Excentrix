@@ -1,56 +1,65 @@
 ---
 import { routes } from '@shared/config/routes';
 import {
+  countCollection,
+  getCatalogSizes,
   getCollectionPerfumes,
-  getMockBrands,
-  getMockCategories,
-  getMockPerfumes,
+  getPerfumes,
 } from '@modules/catalog';
 import {
-  BrandStrip,
-  CollectionTiles,
-  DecantExplainer,
-  GenderTiles,
   getMockSettings,
   HowToBuy,
   InstagramStrip,
+  LoyaltyCard,
   NewArrivals,
+  PrestigeCollection,
   StoreLayout,
 } from '@modules/content';
-import type { BottleShape } from '@modules/product';
+import { INSPIRED_NOTICE } from '@modules/product';
 import ExcentrixHero from '@modules/content/components/home/ExcentrixHero.astro';
 
-const perfumes = getMockPerfumes();
-const categories = getMockCategories();
+const perfumes = getPerfumes();
 const settings = getMockSettings();
-const describe = (slug: string) => categories.find((c) => c.slug === slug);
-const count = (slug: string) => getCollectionPerfumes(perfumes, slug).length;
 
-const collectionTiles = ['nicho', 'disenador', 'arabe', 'decants'].map((slug) => ({
-  title: describe(slug)?.name ?? slug,
-  description: describe(slug)?.description ?? '',
-  href: routes.collection(slug),
-  count: count(slug),
-}));
+// Textos de la página 1 del catálogo PDF ("Colección Prestigio").
+const houses = [
+  {
+    slug: 'disenador',
+    title: 'Diseñador',
+    text: 'Íconos de la moda global: aromas de prestigio que definen épocas.',
+  },
+  {
+    slug: 'nicho',
+    title: 'Nicho',
+    text: 'Exclusividad olfativa y creaciones audaces para el espíritu exigente.',
+  },
+  {
+    slug: 'arabe',
+    title: 'Árabe',
+    text: 'La opulencia del desierto: ámbar, oud y especias con una estela rica.',
+  },
+].map((h) => ({ ...h, href: routes.collection(h.slug), count: countCollection(h.slug) }));
 
-const shapes: Record<string, BottleShape> = { hombre: 'tall', mujer: 'round', unisex: 'oud' };
-const genderTiles = ['hombre', 'mujer', 'unisex'].map((slug) => ({
-  title: describe(slug)?.name ?? slug,
-  href: routes.collection(slug),
-  count: count(slug),
-  shape: shapes[slug] ?? 'tall',
-}));
+const genders = [
+  { slug: 'hombre', title: 'Masculinos', text: 'Fragancias intensas y seductoras.' },
+  { slug: 'mujer', title: 'Femeninos', text: 'Aromas delicados y envolventes.' },
+  { slug: 'unisex', title: 'Unisex', text: 'El equilibrio perfecto para todos.' },
+].map((g) => ({ ...g, href: routes.collection(g.slug), count: countCollection(g.slug) }));
 
 const newArrivals = getCollectionPerfumes(perfumes, 'nuevos-lanzamientos', 'novedades').slice(0, 4);
 ---
 
 <StoreLayout title="Inicio (maqueta)" noindex>
   <ExcentrixHero />
-  <CollectionTiles tiles={collectionTiles} />
-  <NewArrivals perfumes={newArrivals} />
-  <GenderTiles tiles={genderTiles} />
-  <DecantExplainer />
+  <LoyaltyCard />
+  <PrestigeCollection
+    total={perfumes.length}
+    houses={houses}
+    genders={genders}
+    sizes={getCatalogSizes()}
+    notice={INSPIRED_NOTICE}
+  />
+  {newArrivals.length > 0 && <NewArrivals perfumes={newArrivals} />}
   <HowToBuy />
-  <BrandStrip brands={getMockBrands()} />
   <InstagramStrip href={settings.social.instagram} handle={settings.social.handle} />
 </StoreLayout>

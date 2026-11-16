@@ -16,4 +16,6 @@ export { default as GenderTiles } from './components/home/GenderTiles.astro';
 export { default as HomeHero } from './components/home/HomeHero.astro';
 export { default as HowToBuy } from './components/home/HowToBuy.astro';
 export { default as InstagramStrip } from './components/home/InstagramStrip.astro';
+export { default as LoyaltyCard } from './components/home/LoyaltyCard.astro';
+export { default as PrestigeCollection } from './components/home/PrestigeCollection.astro';
 export { default as NewArrivals } from './components/home/NewArrivals.astro';

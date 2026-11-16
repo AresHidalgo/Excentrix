@@ -41,14 +41,21 @@ export type BottleShape = 'tall' | 'round' | 'faceted' | 'oud';
 
 export interface Perfume {
   id: string;
+  /** Si `inspired` es true: nombre de la fragancia de referencia ("Delina"). */
   name: string;
   slug: string;
   brandId: string;
   /** Nombre de la marca ya resuelto en el build (brands/{brandId}.name). */
   brand: string;
+  /**
+   * Versión inspirada: `name` y `brand` son la fragancia y la marca de referencia, no el
+   * producto que se vende. Se muestra siempre como "Inspirado en {name} de {brand}".
+   */
+  inspired?: boolean;
   description: string;
   gender: Gender;
-  concentration: Concentration;
+  /** null cuando no se conoce (catálogo importado sin ese dato). */
+  concentration: Concentration | null;
   olfactoryFamily: string[];
   notes: OlfactoryNotes;
   house: House;

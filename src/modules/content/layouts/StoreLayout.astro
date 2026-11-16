@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@shared/layouts/BaseLayout.astro';
-import { buildMenu, getMockCategories } from '@modules/catalog';
+import { buildMenu, getCategories } from '@modules/catalog';
 import { WhatsAppFloat } from '@modules/whatsapp';
 import AnnouncementBar from '../components/chrome/AnnouncementBar.astro';
 import Footer from '../components/chrome/Footer.astro';
@@ -30,7 +30,7 @@ const {
   hideWhatsAppFloatOnMobile = false,
 } = Astro.props;
 const settings = getMockSettings();
-const menu = buildMenu(getMockCategories());
+const menu = buildMenu(getCategories());
 // Con build.format 'file' la ruta llega como /x.html: se normaliza para marcar el enlace activo.
 const currentPath = Astro.url.pathname.replace(/\.html$/, '');
 ---

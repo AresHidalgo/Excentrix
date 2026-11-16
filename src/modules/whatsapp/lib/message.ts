@@ -8,6 +8,13 @@ export function variantLabel(variant: Pick<WhatsAppVariant, 'type' | 'ml' | 'con
   return `Frasco ${variant.ml} ml${variant.condition === 'tester' ? ' (tester)' : ''}`;
 }
 
+/** "Khamrah – Lattafa" o, para una versión inspirada, "Inspirado en Delina (Parfums de Marly)". */
+export function perfumeLine(perfume: WhatsAppPerfume): string {
+  return perfume.inspired
+    ? `Inspirado en ${perfume.name} (${perfume.brand})`
+    : `${perfume.name} – ${perfume.brand}`;
+}
+
 /** WhatsApp no necesita espacios de no separación: se normalizan a espacios comunes. */
 function plain(text: string): string {
   return text.replace(/\u00A0/g, ' ');
@@ -23,7 +30,7 @@ export function buildWhatsAppMessage({
   url,
   greeting = WHATSAPP_GREETING,
 }: WhatsAppMessageInput): string {
-  const line = `${perfume.name} – ${perfume.brand} · ${variantLabel(variant)} — ${formatPrice(variant.price)}`;
+  const line = `${perfumeLine(perfume)} · ${variantLabel(variant)} — ${formatPrice(variant.price)}`;
   return plain(`${greeting}\n${line}\n${url}`);
 }
 
@@ -34,8 +41,8 @@ export function buildAvailabilityMessage(
   variant?: Pick<WhatsAppVariant, 'type' | 'ml' | 'condition'>,
 ): string {
   const what = variant
-    ? `${perfume.name} – ${perfume.brand} · ${variantLabel(variant)}`
-    : `${perfume.name} – ${perfume.brand}`;
+    ? `${perfumeLine(perfume)} · ${variantLabel(variant)}`
+    : perfumeLine(perfume);
   return plain(`Hola Excentrix, quiero saber si tendrán disponible:\n${what}\n${url}`);
 }
 

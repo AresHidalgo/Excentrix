@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { perfume } = Astro.props;
-const baseAlt = perfumeAlt(perfume.name, perfume.brand);
+const baseAlt = perfumeAlt(perfume.name, perfume.brand, undefined, perfume.inspired);
 
 type Slide = { src?: string; alt: string; variant: 'principal' | 'detalle' | 'ambiente' };
 const slides: Slide[] =

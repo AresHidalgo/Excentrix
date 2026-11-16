@@ -3,6 +3,7 @@ import { routes } from '@shared/config/routes';
 import Container from '@shared/ui/Container.astro';
 import Icon from '@shared/ui/Icon.astro';
 import type { MenuItem } from '@modules/catalog';
+import { INSPIRED_NOTICE } from '@modules/product';
 import { buildWhatsAppUrl, WHATSAPP_PHONE } from '@modules/whatsapp';
 import type { SiteSettings } from '../../schemas';
 
@@ -115,6 +116,9 @@ const linkClass = 'text-sm text-white/70 transition-colors hover:text-white';
     <Container class="flex flex-col gap-2 py-6 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
       <p>© 2026 Excentrix Perfumería. Todos los derechos reservados.</p>
       <p>Precios en pesos colombianos (COP), impuestos incluidos.</p>
+    </Container>
+    <Container class="pb-6 text-[11px] leading-relaxed text-white/40">
+      <p>{INSPIRED_NOTICE}</p>
     </Container>
   </div>
 </footer>

@@ -1,0 +1,730 @@
+[
+  {
+    "id": "abercrombie-y-fitch",
+    "nombre": "Abercrombie & Fitch",
+    "slug": "abercrombie-y-fitch",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "ahli",
+    "nombre": "Ahli",
+    "slug": "ahli",
+    "casa": "arabe",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "ajmal",
+    "nombre": "Ajmal",
+    "slug": "ajmal",
+    "casa": "arabe",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "al-haramain",
+    "nombre": "Al Haramain",
+    "slug": "al-haramain",
+    "casa": "arabe",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "animale",
+    "nombre": "Animale",
+    "slug": "animale",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "antonio-banderas",
+    "nombre": "Antonio Banderas",
+    "slug": "antonio-banderas",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "ariana-grande",
+    "nombre": "Ariana Grande",
+    "slug": "ariana-grande",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "armaf",
+    "nombre": "Armaf",
+    "slug": "armaf",
+    "casa": "arabe",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "azzaro",
+    "nombre": "Azzaro",
+    "slug": "azzaro",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "baldessarini",
+    "nombre": "Baldessarini",
+    "slug": "baldessarini",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "bharara",
+    "nombre": "Bharara",
+    "slug": "bharara",
+    "casa": "arabe",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "billie-eilish",
+    "nombre": "Billie Eilish",
+    "slug": "billie-eilish",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "bond-no-9",
+    "nombre": "Bond No 9",
+    "slug": "bond-no-9",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "boucheron",
+    "nombre": "Boucheron",
+    "slug": "boucheron",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "britney-spears",
+    "nombre": "Britney Spears",
+    "slug": "britney-spears",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "burberry",
+    "nombre": "Burberry",
+    "slug": "burberry",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "bvlgari",
+    "nombre": "Bvlgari",
+    "slug": "bvlgari",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "byredo",
+    "nombre": "Byredo",
+    "slug": "byredo",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "cacharel",
+    "nombre": "Cacharel",
+    "slug": "cacharel",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "calvin-klein",
+    "nombre": "Calvin Klein",
+    "slug": "calvin-klein",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "carolina-herrera",
+    "nombre": "Carolina Herrera",
+    "slug": "carolina-herrera",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "cartier",
+    "nombre": "Cartier",
+    "slug": "cartier",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "chanel",
+    "nombre": "Chanel",
+    "slug": "chanel",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "creed",
+    "nombre": "Creed",
+    "slug": "creed",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "cristiano-ronaldo",
+    "nombre": "Cristiano Ronaldo",
+    "slug": "cristiano-ronaldo",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "davidoff",
+    "nombre": "Davidoff",
+    "slug": "davidoff",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "diesel",
+    "nombre": "Diesel",
+    "slug": "diesel",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "dior",
+    "nombre": "Dior",
+    "slug": "dior",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "dolce-y-gabbana",
+    "nombre": "Dolce & Gabbana",
+    "slug": "dolce-y-gabbana",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "elizabeth-taylor",
+    "nombre": "Elizabeth Taylor",
+    "slug": "elizabeth-taylor",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "escada",
+    "nombre": "Escada",
+    "slug": "escada",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "faconnable",
+    "nombre": "Façonnable",
+    "slug": "faconnable",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "giardini-di-toscana",
+    "nombre": "Giardini Di Toscana",
+    "slug": "giardini-di-toscana",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "giorgio-armani",
+    "nombre": "Giorgio Armani",
+    "slug": "giorgio-armani",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "givenchy",
+    "nombre": "Givenchy",
+    "slug": "givenchy",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "gucci",
+    "nombre": "Gucci",
+    "slug": "gucci",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "guerlain",
+    "nombre": "Guerlain",
+    "slug": "guerlain",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "guess",
+    "nombre": "Guess",
+    "slug": "guess",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "guy-laroche",
+    "nombre": "Guy Laroche",
+    "slug": "guy-laroche",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "halloween",
+    "nombre": "Halloween",
+    "slug": "halloween",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "hermes",
+    "nombre": "Hermès",
+    "slug": "hermes",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "hugo-boss",
+    "nombre": "Hugo Boss",
+    "slug": "hugo-boss",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "ilmin",
+    "nombre": "ILMIN",
+    "slug": "ilmin",
+    "casa": "nicho",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "initio",
+    "nombre": "Initio",
+    "slug": "initio",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "issey-miyake",
+    "nombre": "Issey Miyake",
+    "slug": "issey-miyake",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "jean-paul-gaultier",
+    "nombre": "Jean Paul Gaultier",
+    "slug": "jean-paul-gaultier",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "johan-b",
+    "nombre": "Johan B",
+    "slug": "johan-b",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "juicy-couture",
+    "nombre": "Juicy Couture",
+    "slug": "juicy-couture",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "katy-perry",
+    "nombre": "Katy Perry",
+    "slug": "katy-perry",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "kayali",
+    "nombre": "Kayali",
+    "slug": "kayali",
+    "casa": "nicho",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "kenzo",
+    "nombre": "Kenzo",
+    "slug": "kenzo",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "kim-kardashian",
+    "nombre": "Kim Kardashian",
+    "slug": "kim-kardashian",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "lacoste",
+    "nombre": "Lacoste",
+    "slug": "lacoste",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "lancome",
+    "nombre": "Lancôme",
+    "slug": "lancome",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "lattafa",
+    "nombre": "Lattafa",
+    "slug": "lattafa",
+    "casa": "arabe",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "le-labo",
+    "nombre": "Le Labo",
+    "slug": "le-labo",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "liz-claiborne",
+    "nombre": "Liz Claiborne",
+    "slug": "liz-claiborne",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "loewe",
+    "nombre": "Loewe",
+    "slug": "loewe",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "lolita-lempicka",
+    "nombre": "Lolita Lempicka",
+    "slug": "lolita-lempicka",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "louis-vuitton",
+    "nombre": "Louis Vuitton",
+    "slug": "louis-vuitton",
+    "casa": "nicho",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "maison-francis-kurkdjian",
+    "nombre": "Maison Francis Kurkdjian",
+    "slug": "maison-francis-kurkdjian",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "mancera",
+    "nombre": "Mancera",
+    "slug": "mancera",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "marc-jacobs",
+    "nombre": "Marc Jacobs",
+    "slug": "marc-jacobs",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "memo-paris",
+    "nombre": "Memo Paris",
+    "slug": "memo-paris",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "milton-lloyd",
+    "nombre": "Milton Lloyd",
+    "slug": "milton-lloyd",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "montale",
+    "nombre": "Montale",
+    "slug": "montale",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "montblanc",
+    "nombre": "Montblanc",
+    "slug": "montblanc",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "moschino",
+    "nombre": "Moschino",
+    "slug": "moschino",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "mugler",
+    "nombre": "Mugler",
+    "slug": "mugler",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "nautica",
+    "nombre": "Nautica",
+    "slug": "nautica",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "nishane",
+    "nombre": "Nishane",
+    "slug": "nishane",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "one-direction",
+    "nombre": "One Direction",
+    "slug": "one-direction",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "orientica",
+    "nombre": "Orientica",
+    "slug": "orientica",
+    "casa": "arabe",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "oscar-de-la-renta",
+    "nombre": "Oscar de la Renta",
+    "slug": "oscar-de-la-renta",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "paloma-picasso",
+    "nombre": "Paloma Picasso",
+    "slug": "paloma-picasso",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "parfums-de-marly",
+    "nombre": "Parfums de Marly",
+    "slug": "parfums-de-marly",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "paris-hilton",
+    "nombre": "Paris Hilton",
+    "slug": "paris-hilton",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "perry-ellis",
+    "nombre": "Perry Ellis",
+    "slug": "perry-ellis",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "pinaud-clubman",
+    "nombre": "Pinaud Clubman",
+    "slug": "pinaud-clubman",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "prada",
+    "nombre": "Prada",
+    "slug": "prada",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "rabanne",
+    "nombre": "Rabanne",
+    "slug": "rabanne",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "ralph-lauren",
+    "nombre": "Ralph Lauren",
+    "slug": "ralph-lauren",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "rihanna",
+    "nombre": "Rihanna",
+    "slug": "rihanna",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "royalty-by-maluma",
+    "nombre": "Royalty by Maluma",
+    "slug": "royalty-by-maluma",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "salvatore-ferragamo",
+    "nombre": "Salvatore Ferragamo",
+    "slug": "salvatore-ferragamo",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "selena-gomez",
+    "nombre": "Selena Gomez",
+    "slug": "selena-gomez",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "shakira",
+    "nombre": "Shakira",
+    "slug": "shakira",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "sofia-vergara",
+    "nombre": "Sofia Vergara",
+    "slug": "sofia-vergara",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "tiziana-terenzi",
+    "nombre": "Tiziana Terenzi",
+    "slug": "tiziana-terenzi",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "tom-ford",
+    "nombre": "Tom Ford",
+    "slug": "tom-ford",
+    "casa": "nicho",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "tommy-hilfiger",
+    "nombre": "Tommy Hilfiger",
+    "slug": "tommy-hilfiger",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "tous",
+    "nombre": "Tous",
+    "slug": "tous",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "valentino",
+    "nombre": "Valentino",
+    "slug": "valentino",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "versace",
+    "nombre": "Versace",
+    "slug": "versace",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "victoria-s-secret",
+    "nombre": "Victoria's Secret",
+    "slug": "victoria-s-secret",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "victorinox-swiss-army",
+    "nombre": "Victorinox Swiss Army",
+    "slug": "victorinox-swiss-army",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "viktor-y-rolf",
+    "nombre": "Viktor & Rolf",
+    "slug": "viktor-y-rolf",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "xerjoff",
+    "nombre": "Xerjoff",
+    "slug": "xerjoff",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "yanbal",
+    "nombre": "Yanbal",
+    "slug": "yanbal",
+    "casa": "disenador",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "yohji-yamamoto",
+    "nombre": "Yohji Yamamoto",
+    "slug": "yohji-yamamoto",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "yves-saint-laurent",
+    "nombre": "Yves Saint Laurent",
+    "slug": "yves-saint-laurent",
+    "casa": "disenador",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "zara",
+    "nombre": "Zara",
+    "slug": "zara",
+    "casa": "disenador",
+    "casaPorConfirmar": true
+  },
+  {
+    "id": "zarkoperfume",
+    "nombre": "Zarkoperfume",
+    "slug": "zarkoperfume",
+    "casa": "nicho",
+    "casaPorConfirmar": false
+  },
+  {
+    "id": "zuhair-murad",
+    "nombre": "Zuhair Murad",
+    "slug": "zuhair-murad",
+    "casa": "arabe",
+    "casaPorConfirmar": true
+  }
+]
