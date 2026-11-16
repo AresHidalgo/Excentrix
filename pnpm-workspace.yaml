@@ -1,0 +1,23 @@
+# Configuración de pnpm del proyecto (aplica también en GitHub Actions).
+
+# No instalar versiones publicadas hace menos de 24 horas (en minutos).
+minimumReleaseAge: 1440
+
+# Bloquear versiones con menos evidencia de confianza que sus versiones anteriores
+# (posible robo del paquete).
+trustPolicy: no-downgrade
+
+# Excepciones revisadas a mano:
+# - chokidar@4.0.3 (dependencia de firebase-tools): publicada el 2024-12-18 por su único
+#   mantenedor (paulmillr) sin attestation de procedencia, a diferencia de 4.0.0/4.0.1.
+#   Sin incidentes conocidos; la 5.0.0 vuelve a tener procedencia.
+trustPolicyExclude:
+  - chokidar@4.0.3
+
+# Scripts de instalación de dependencias: bloqueados por defecto en pnpm 10.
+# Revisados y dejados sin ejecutar a propósito (firebase-tools funciona sin ellos):
+# - protobufjs: postinstall informativo.
+# - re2: descarga un binario nativo o compila con node-gyp; es opcional.
+ignoredBuiltDependencies:
+  - protobufjs
+  - re2
