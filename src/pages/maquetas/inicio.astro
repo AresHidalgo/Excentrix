@@ -12,13 +12,13 @@ import {
   DecantExplainer,
   GenderTiles,
   getMockSettings,
-  HomeHero,
   HowToBuy,
   InstagramStrip,
   NewArrivals,
   StoreLayout,
 } from '@modules/content';
 import type { BottleShape } from '@modules/product';
+import ExcentrixHero from '@modules/content/components/home/ExcentrixHero.astro';
 
 const perfumes = getMockPerfumes();
 const categories = getMockCategories();
@@ -45,7 +45,7 @@ const newArrivals = getCollectionPerfumes(perfumes, 'nuevos-lanzamientos', 'nove
 ---
 
 <StoreLayout title="Inicio (maqueta)" noindex>
-  <HomeHero />
+  <ExcentrixHero />
   <CollectionTiles tiles={collectionTiles} />
   <NewArrivals perfumes={newArrivals} />
   <GenderTiles tiles={genderTiles} />
