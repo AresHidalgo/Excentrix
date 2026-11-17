@@ -7,8 +7,21 @@ import { Button, inputClass, Notice, Skeleton } from './ui';
 const HOUSE_LABEL = { nicho: 'Nicho', disenador: 'Diseñador', arabe: 'Árabe' } as const;
 const GENDER_LABEL = { hombre: 'Hombre', mujer: 'Mujer', unisex: 'Unisex' } as const;
 
-/** Perfumes por página en la tabla. */
-const PAGE_SIZE = 25;
+/** Perfumes por página: 8 en escritorio (tabla) y 5 en móvil (tarjetas). */
+const PAGE_SIZE_DESKTOP = 8;
+const PAGE_SIZE_MOBILE = 5;
+const DESKTOP_QUERY = '(min-width: 768px)';
+
+function useIsDesktop(): boolean {
+  const [desktop, setDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches);
+  useEffect(() => {
+    const media = window.matchMedia(DESKTOP_QUERY);
+    const onChange = () => setDesktop(media.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+  return desktop;
+}
 
 function normalize(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -24,6 +37,8 @@ export default function PerfumeList() {
   const [status, setStatus] = useState('');
   const [reload, setReload] = useState(0);
   const [page, setPage] = useState(1);
+  const isDesktop = useIsDesktop();
+  const PAGE_SIZE = isDesktop ? PAGE_SIZE_DESKTOP : PAGE_SIZE_MOBILE;
 
   useEffect(() => {
     let alive = true;
@@ -55,7 +70,7 @@ export default function PerfumeList() {
   }, [perfumes, brands, query, house, gender, status]);
 
   // Al cambiar la búsqueda o un filtro se vuelve a la primera página.
-  useEffect(() => setPage(1), [query, house, gender, status]);
+  useEffect(() => setPage(1), [query, house, gender, status, PAGE_SIZE]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -152,7 +167,41 @@ export default function PerfumeList() {
         </Notice>
       )}
 
-      {filtered.length > 0 && (
+      {filtered.length > 0 && !isDesktop && (
+        <ul className="flex flex-col gap-3">
+          {visible.map((p) => (
+            <li key={p.slug}>
+              <a
+                href={`#/perfume/${encodeURIComponent(p.slug)}`}
+                className="flex flex-col gap-2 border border-line bg-white p-4 active:bg-paper"
+              >
+                <span className="flex items-start justify-between gap-3">
+                  <span className="flex min-w-0 flex-col">
+                    <span className="font-medium">
+                      {p.inspired && <span className="text-ink-soft">Inspirado en </span>}
+                      {p.name}
+                    </span>
+                    <span className="truncate text-xs text-ink-soft">
+                      {brands.get(p.brandId)?.name ?? p.brandId}
+                    </span>
+                  </span>
+                  <span
+                    className={`shrink-0 px-2 py-0.5 text-[10px] tracking-[0.12em] uppercase ${p.status === 'published' ? 'bg-ink text-white' : 'border border-line text-ink-soft'}`}
+                  >
+                    {p.status === 'published' ? 'Publicado' : 'Borrador'}
+                  </span>
+                </span>
+                <span className="text-xs text-ink-soft">
+                  {HOUSE_LABEL[p.house]} · {GENDER_LABEL[p.gender]} ·{' '}
+                  {p.images.length ? `${p.images.length} foto(s)` : 'Sin fotos'}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {filtered.length > 0 && isDesktop && (
         <div className="overflow-x-auto border border-line bg-white">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b border-line text-[11px] tracking-[0.12em] text-ink-soft uppercase">
@@ -222,7 +271,7 @@ export default function PerfumeList() {
             >
               Anterior
             </Button>
-            <span className="px-2 text-ink" aria-current="page">
+            <span className="px-1 text-ink sm:px-2" aria-current="page">
               Página {currentPage} de {pageCount}
             </span>
             <Button
