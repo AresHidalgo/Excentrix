@@ -7,8 +7,8 @@ import { Button, inputClass, Notice, Skeleton } from './ui';
 const HOUSE_LABEL = { nicho: 'Nicho', disenador: 'Diseñador', arabe: 'Árabe' } as const;
 const GENDER_LABEL = { hombre: 'Hombre', mujer: 'Mujer', unisex: 'Unisex' } as const;
 
-/** Perfumes por página: 8 en escritorio (tabla) y 5 en móvil (tarjetas). */
-const PAGE_SIZE_DESKTOP = 8;
+/** Perfumes por página: 15 en escritorio (tabla) y 5 en móvil (tarjetas). */
+const PAGE_SIZE_DESKTOP = 15;
 const PAGE_SIZE_MOBILE = 5;
 const DESKTOP_QUERY = '(min-width: 768px)';
 
