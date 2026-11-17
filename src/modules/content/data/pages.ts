@@ -1,30 +1,36 @@
 import type { ContentPage } from '../schemas';
 
-/** Páginas de contenido y confianza (PLAN §5). Textos de muestra para las maquetas. */
+/** Páginas de contenido y confianza (PLAN §5). Envíos, términos y privacidad: textos base por confirmar con el negocio. */
 const PAGES: ContentPage[] = [
   {
-    slug: 'que-es-un-decant',
+    slug: 'versiones',
     eyebrow: 'Guía',
-    title: '¿Qué es un decant?',
+    title: 'Inspiración, réplica 1.1 u original: ¿cuál elijo?',
     intro:
-      'Un decant es una porción del perfume original, trasvasada del frasco de la marca a un atomizador pequeño. Es la forma más sencilla de probar un perfume en tu piel antes de comprar el frasco completo.',
+      'En Excentrix cada perfume puede ofrecerse en hasta tres versiones. Te contamos qué es cada una para que sepas exactamente qué recibes.',
     sections: [
       {
-        heading: 'Es el mismo perfume',
+        heading: 'Inspiración',
         paragraphs: [
-          'Tomamos el líquido directamente del frasco original, con jeringa y atomizadores de vidrio limpios. No se diluye ni se mezcla: es exactamente la misma fragancia.',
+          'Una fragancia propia que evoca al perfume de referencia. No es el perfume ni el frasco de la marca. Viene en 30, 60 y 100 ml, con el mismo precio para todo el catálogo.',
         ],
       },
       {
-        heading: '¿Cuánto me dura?',
+        heading: 'Réplica 1.1',
         paragraphs: [
-          'Cada mililitro rinde unas 12 a 15 atomizaciones. Un decant de 3 ml alcanza para una o dos semanas de uso diario; uno de 10 ml, para un poco más de un mes.',
+          'Una imitación del perfume y de su frasco. No es el perfume original ni el frasco original de la marca. Cada referencia tiene su propio precio.',
         ],
       },
       {
-        heading: '¿Por qué comprar decants?',
+        heading: 'Original',
         paragraphs: [
-          'Para conocer perfumes de nicho sin pagar el frasco completo, para llevar en el bolso o de viaje, o para tener varias fragancias y alternarlas según la ocasión.',
+          'El perfume original de la marca. Cada referencia tiene su propio precio y disponibilidad.',
+        ],
+      },
+      {
+        heading: '¿Cómo sé qué versión estoy comprando?',
+        paragraphs: [
+          'En la ficha de cada perfume eliges primero la versión y luego el tamaño. El mensaje de WhatsApp incluye la versión elegida, para que no haya confusiones.',
         ],
       },
     ],
@@ -43,7 +49,7 @@ const PAGES: ContentPage[] = [
       {
         heading: '2. Escoge la presentación',
         paragraphs: [
-          'Decant de 3, 5 o 10 ml, o el frasco completo. El precio cambia al instante según lo que elijas.',
+          'Elige la versión (inspiración, réplica 1.1 u original) y el tamaño. El precio cambia al instante según lo que elijas.',
         ],
       },
       {

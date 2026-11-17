@@ -60,6 +60,10 @@ const genders = [
 ].map((g) => ({ ...g, href: routes.collection(g.slug), count: countCollection(g.slug) }));
 
 const newArrivals = getCollectionPerfumes(perfumes, 'nuevos-lanzamientos', 'novedades').slice(0, 4);
+// Destacados: los que el admin marca como "Destacado".
+const featured = perfumes.filter((p) => p.featured).slice(0, 8);
+// Instagram solo con una cuenta real configurada (no el marcador de posición).
+const hasInstagram = !/instagram\.com\/?$/.test(settings.social.instagram);
 ---
 
 <StoreLayout>
@@ -73,7 +77,18 @@ const newArrivals = getCollectionPerfumes(perfumes, 'nuevos-lanzamientos', 'nove
     sizes={getCatalogSizes()}
     notice={INSPIRED_NOTICE}
   />
+  {featured.length > 0 && (
+    <NewArrivals
+      perfumes={featured}
+      id="destacados"
+      eyebrow="Selección Excentrix"
+      title="Destacados"
+      href={null}
+    />
+  )}
   {newArrivals.length > 0 && <NewArrivals perfumes={newArrivals} />}
   <HowToBuy />
-  <InstagramStrip href={settings.social.instagram} handle={settings.social.handle} />
+  {hasInstagram && (
+    <InstagramStrip href={settings.social.instagram} handle={settings.social.handle} />
+  )}
 </StoreLayout>
