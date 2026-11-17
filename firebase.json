@@ -59,6 +59,18 @@
             }
           ]
         }
+      ],
+      "redirects": [
+        {
+          "source": "/maquetas/inicio",
+          "destination": "/",
+          "type": 301
+        },
+        {
+          "regex": "^/maquetas/(?P<seccion>coleccion|perfume|contenido)/(?P<slug>[^/]+)$",
+          "destination": "/:seccion/:slug",
+          "type": 301
+        }
       ]
     },
     {

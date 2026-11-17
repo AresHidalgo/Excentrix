@@ -62,7 +62,7 @@ const linkBase =
               <ul
                 id={`menu-${index}`}
                 hidden
-                class="absolute top-full left-1/2 mt-2 min-w-48 -translate-x-1/2 animate-fade-in border border-line bg-white py-2"
+                class="absolute top-full left-1/2 mt-2 min-w-48 -translate-x-1/2 animate-fade-in border border-line bg-white py-2 before:absolute before:inset-x-0 before:-top-2.5 before:h-2.5 before:content-['']"
                 data-dropdown-panel
               >
                 {item.children.map((child) => (
@@ -144,13 +144,27 @@ const linkBase =
       const trigger = dropdown.querySelector<HTMLButtonElement>('[data-dropdown-trigger]');
       const panel = dropdown.querySelector<HTMLElement>('[data-dropdown-panel]');
       if (!trigger || !panel) continue;
+      let closeTimer = 0;
+      let lastPointer = '';
       const setOpen = (open: boolean) => {
+        window.clearTimeout(closeTimer);
         trigger.setAttribute('aria-expanded', String(open));
         panel.hidden = !open;
       };
-      trigger.addEventListener('click', () => setOpen(panel.hidden === true));
+      // Con mouse, el hover ya abre: el clic no debe cerrarlo. Con toque o teclado, alterna.
+      trigger.addEventListener('pointerdown', (e) => (lastPointer = e.pointerType));
+      trigger.addEventListener('click', () => {
+        if (lastPointer === 'mouse') setOpen(true);
+        else setOpen(panel.hidden === true);
+        lastPointer = '';
+      });
       dropdown.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && setOpen(true));
-      dropdown.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && setOpen(false));
+      // Cierre con un breve retraso: perdona el paso del cursor del botón al panel.
+      dropdown.addEventListener('pointerleave', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        window.clearTimeout(closeTimer);
+        closeTimer = window.setTimeout(() => setOpen(false), 250);
+      });
       dropdown.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !panel.hidden) {
           setOpen(false);

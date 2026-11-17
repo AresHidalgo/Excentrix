@@ -5,6 +5,12 @@ import Icon from '@shared/ui/Icon.tsx';
 
 export interface PresentationOption {
   id: string;
+  /** Grupo del selector (línea y tipo), p. ej. "replica:frasco". */
+  groupKey: string;
+  /** Título del grupo: "Inspiración", "Réplica 1.1", "Original", "Decant"… */
+  groupTitle: string;
+  /** Aviso del grupo (qué es exactamente esa línea). */
+  groupNotice: string | null;
   type: 'decant' | 'frasco';
   ml: number;
   tester: boolean;
@@ -24,11 +30,6 @@ interface Props {
   leadTimeLabel: string | null;
   decantInfoHref: string;
 }
-
-const GROUPS = [
-  { type: 'decant', title: 'Decant' },
-  { type: 'frasco', title: 'Frasco completo' },
-] as const;
 
 export default function PresentationSelector({
   options,
@@ -67,15 +68,18 @@ export default function PresentationSelector({
         )}
       </div>
 
-      {GROUPS.map((group) => {
-        const groupOptions = options.filter((o) => o.type === group.type);
-        if (groupOptions.length === 0) return null;
+      {[...new Set(options.map((o) => o.groupKey))].map((key) => {
+        const groupOptions = options.filter((o) => o.groupKey === key);
+        const group = groupOptions[0];
         return (
-          <fieldset key={group.type} class="flex flex-col gap-3">
+          <fieldset key={key} class="flex flex-col gap-3">
             <legend class="eyebrow mb-3 flex items-center gap-2 text-ink">
-              {group.title}
+              {group.groupTitle}
               <span class="text-ink-soft">· {groupOptions.map((o) => o.ml).join(' · ')} ml</span>
             </legend>
+            {group.groupNotice && (
+              <p class="-mt-2 text-xs leading-relaxed text-ink-soft">{group.groupNotice}</p>
+            )}
             <div class="flex flex-wrap gap-2">
               {groupOptions.map((o) => {
                 const isSelected = o.id === selected?.id;

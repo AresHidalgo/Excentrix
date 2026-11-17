@@ -5,6 +5,7 @@ import Icon from '@shared/ui/Icon.astro';
 import {
   availableVariants,
   cheapestVariant,
+  LINE_LABEL,
   PerfumeBadges,
   perfumeAlt,
   ProductImage,
@@ -95,6 +96,11 @@ const quick = soldOut
       <p class="eyebrow truncate text-[10px] text-ink-soft">
         {perfume.inspired ? `Inspirado en · ${perfume.brand}` : perfume.brand}
       </p>
+      {!perfume.inspired && perfume.lines.some((l) => l !== 'original') && (
+        <p class="text-[10px] tracking-[0.12em] text-ink-soft uppercase">
+          {perfume.lines.map((l) => LINE_LABEL[l]).join(' · ')}
+        </p>
+      )}
       <h3 class="font-display text-base leading-snug sm:text-lg">
         <a
           href={href}

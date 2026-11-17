@@ -1,5 +1,6 @@
 ---
 import { CONCENTRATION_LABEL, GENDER_LABEL, INSPIRED_NOTICE } from '../lib/labels';
+import { LINE_LABEL } from '../lib/lines';
 import type { Perfume } from '../schemas';
 import PerfumeBadges from './PerfumeBadges.astro';
 import PurchasePanel from './PurchasePanel.astro';
@@ -17,7 +18,11 @@ const meta = [
 ].filter(Boolean);
 const metaLine = meta.length > 0 ? meta.join(' · ') : `Fragancia ${GENDER_LABEL[perfume.gender]}`;
 
-// Garantías: distintas para versiones inspiradas (nunca se promete "original").
+const onlyOriginal = perfume.lines.length === 1 && perfume.lines[0] === 'original';
+// Aviso de no afiliación cuando hay versiones que no son el producto de la marca.
+const showNotice = perfume.lines.some((l) => l !== 'original');
+
+// Garantías según las líneas: nunca se promete "original" para lo que no lo es.
 const promises = perfume.inspired
   ? [
       {
@@ -27,14 +32,26 @@ const promises = perfume.inspired
       { title: 'Tres tamaños', text: '30, 60 y 100 ml al mismo precio para todo el catálogo.' },
       { title: 'Envíos', text: 'A toda Colombia. Coordinamos por WhatsApp.' },
     ]
-  : [
-      { title: 'Originales', text: 'Frascos sellados o tester, siempre originales.' },
-      {
-        title: 'Decants al momento',
-        text: 'Envasados del frasco original en atomizador de vidrio.',
-      },
-      { title: 'Envíos', text: 'A toda Colombia. Coordinamos por WhatsApp.' },
-    ];
+  : !onlyOriginal
+    ? [
+        {
+          title: 'Varias versiones',
+          text: `${perfume.lines.map((l) => LINE_LABEL[l]).join(', ')}. Elige la que prefieras.`,
+        },
+        {
+          title: 'Sin confusiones',
+          text: 'Cada versión dice exactamente qué es: solo "Original" es el producto de la marca.',
+        },
+        { title: 'Envíos', text: 'A toda Colombia. Coordinamos por WhatsApp.' },
+      ]
+    : [
+        { title: 'Originales', text: 'Frascos sellados o tester, siempre originales.' },
+        {
+          title: 'Decants al momento',
+          text: 'Envasados del frasco original en atomizador de vidrio.',
+        },
+        { title: 'Envíos', text: 'A toda Colombia. Coordinamos por WhatsApp.' },
+      ];
 ---
 
 <div class="flex flex-col gap-8">
@@ -42,6 +59,15 @@ const promises = perfume.inspired
     <p class="eyebrow text-ink-soft">
       {perfume.inspired ? `Inspirado en · ${perfume.brand}` : perfume.brand}
     </p>
+    {!perfume.inspired && !onlyOriginal && (
+      <ul class="flex flex-wrap gap-2" aria-label="Versiones disponibles">
+        {perfume.lines.map((l) => (
+          <li class="border border-line px-2 py-0.5 text-[10px] tracking-[0.14em] text-ink uppercase">
+            {LINE_LABEL[l]}
+          </li>
+        ))}
+      </ul>
+    )}
     <h1 class="text-4xl leading-[1.05] sm:text-5xl">
       {perfume.inspired && <span class="sr-only">Inspirado en </span>}
       {perfume.name}
@@ -64,5 +90,5 @@ const promises = perfume.inspired
     ))}
   </ul>
 
-  {perfume.inspired && <p class="text-[11px] leading-relaxed text-ink-soft">{INSPIRED_NOTICE}</p>}
+  {showNotice && <p class="text-[11px] leading-relaxed text-ink-soft">{INSPIRED_NOTICE}</p>}
 </div>

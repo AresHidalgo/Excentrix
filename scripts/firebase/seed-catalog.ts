@@ -57,7 +57,6 @@ const perfumes: PerfumeDoc[] = catalogo.map((item, index) => {
     slug: item.slug,
     name: item.inspiradoEn,
     brandId: item.marcaId,
-    inspired: true,
     description: `Fragancia ${GENDER_TEXT[gender]} inspirada en ${item.inspiradoEn} de ${brand.name}, de nuestra línea ${HOUSE_TEXT[brand.house]}.`,
     gender,
     house: brand.house,
@@ -65,7 +64,14 @@ const perfumes: PerfumeDoc[] = catalogo.map((item, index) => {
     olfactoryFamily: [],
     notes: { top: [], heart: [], base: [] },
     categoryIds: [],
-    sizes: CATALOG_SIZES.map((s) => ({ ml: s.ml, available: true })),
+    offers: {
+      inspiracion: {
+        active: true,
+        sizes: CATALOG_SIZES.map((s) => ({ ml: s.ml, available: true })),
+      },
+      replica: { active: false, sizes: [] },
+      original: { active: false, sizes: [] },
+    },
     badges: [],
     leadTime: null,
     images: [],

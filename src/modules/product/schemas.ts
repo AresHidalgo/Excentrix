@@ -9,9 +9,13 @@ export type House = 'nicho' | 'disenador' | 'arabe';
 export type PerfumeBadge = 'nuevo' | 'bajo-encargo' | 'preventa';
 export type VariantType = 'decant' | 'frasco';
 export type BottleCondition = 'nuevo' | 'tester';
+/** Línea de producto: inspiración, réplica 1.1 u original (ver documents.ts). */
+export type Line = 'inspiracion' | 'replica' | 'original';
 
 export interface Variant {
   id: string;
+  /** Línea a la que pertenece esta presentación. */
+  line: Line;
   type: VariantType;
   ml: number;
   price: number;
@@ -47,9 +51,11 @@ export interface Perfume {
   brandId: string;
   /** Nombre de la marca ya resuelto en el build (brands/{brandId}.name). */
   brand: string;
+  /** Líneas en las que se ofrece (orden: inspiración, réplica 1.1, original). */
+  lines: Line[];
   /**
-   * Versión inspirada: `name` y `brand` son la fragancia y la marca de referencia, no el
-   * producto que se vende. Se muestra siempre como "Inspirado en {name} de {brand}".
+   * Derivado: true si el perfume se ofrece SOLO como inspiración. Entonces `name` y `brand` son la
+   * fragancia y la marca de referencia y se muestra "Inspirado en {name} de {brand}".
    */
   inspired?: boolean;
   description: string;

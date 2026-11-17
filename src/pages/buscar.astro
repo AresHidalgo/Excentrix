@@ -1,0 +1,27 @@
+---
+import { routes } from '@shared/config/routes';
+import Container from '@shared/ui/Container.astro';
+import { getPerfumes, priceFrom } from '@modules/catalog';
+import { StoreLayout } from '@modules/content';
+import { LINE_LABEL, GENDER_LABEL } from '@modules/product';
+import { SearchPanel, type SearchItem } from '@modules/search';
+
+// Índice liviano para buscar en el navegador (nombre, marca, versiones, género).
+const items: SearchItem[] = getPerfumes().map((p) => ({
+  slug: p.slug,
+  href: routes.perfume(p.slug),
+  name: p.name,
+  brand: p.brand,
+  eyebrow: p.inspired ? `Inspirado en · ${p.brand}` : p.brand,
+  lines: p.lines.map((l) => LINE_LABEL[l]).join(' · '),
+  gender: GENDER_LABEL[p.gender],
+  priceFrom: p.variants.length > 0 ? priceFrom(p) : null,
+  image: p.images[0]?.src ?? null,
+}));
+---
+
+<StoreLayout title="Buscar" description="Busca perfumes por nombre o marca." noindex>
+  <Container class="py-12 sm:py-16">
+    <SearchPanel items={items} />
+  </Container>
+</StoreLayout>

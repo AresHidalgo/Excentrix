@@ -11,6 +11,8 @@ export interface WhatsAppPerfume {
 }
 
 export interface WhatsAppVariant {
+  /** Línea de la presentación; el mensaje la nombra (Inspiración, Réplica 1.1, Original). */
+  line?: 'inspiracion' | 'replica' | 'original';
   type: 'decant' | 'frasco';
   ml: number;
   price: number;
