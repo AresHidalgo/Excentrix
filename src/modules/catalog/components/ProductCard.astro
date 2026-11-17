@@ -5,6 +5,7 @@ import Icon from '@shared/ui/Icon.astro';
 import {
   availableVariants,
   cheapestVariant,
+  LINE_LABEL,
   PerfumeBadges,
   perfumeAlt,
   ProductImage,
@@ -32,7 +33,10 @@ const available = availableVariants(perfume);
 const cheapest = cheapestVariant(perfume);
 const soldOut = cheapest === null;
 const onSale = cheapest !== null && variantOnSale(cheapest);
-const alt = perfumeAlt(perfume.name, perfume.brand);
+const alt = perfumeAlt(perfume.name, perfume.brand, undefined, perfume.inspired);
+// Fotos de Cloudinary si existen: la segunda aparece al pasar el mouse.
+const mainImage = perfume.images[0];
+const hoverImage = perfume.images[1];
 
 // Acceso rápido (PLAN §5): con un solo tamaño va directo a WhatsApp; con varios, a la ficha.
 const quick = soldOut
@@ -59,30 +63,52 @@ const quick = soldOut
       <div
         class:list={[
           'transition-opacity duration-500 ease-(--ease-luxe)',
-          soldOut ? 'opacity-50 grayscale' : 'group-hover/card:opacity-0',
+          soldOut
+            ? 'opacity-50 grayscale'
+            : (hoverImage || !mainImage) && 'group-hover/card:opacity-0',
         ]}
       >
-        <ProductImage alt={alt} shape={perfume.shape} loading={loading} />
+        <ProductImage
+          src={mainImage?.src}
+          alt={mainImage?.alt ?? alt}
+          shape={perfume.shape}
+          loading={loading}
+        />
       </div>
-      {!soldOut && (
+      {!soldOut && (hoverImage || !mainImage) && (
         <div
           aria-hidden="true"
           class="absolute inset-0 opacity-0 transition-opacity duration-500 ease-(--ease-luxe) group-hover/card:opacity-100"
         >
-          <ProductImage alt="" shape={perfume.shape} variant="detalle" loading="lazy" />
+          <ProductImage
+            src={hoverImage?.src}
+            alt=""
+            shape={perfume.shape}
+            variant={hoverImage ? 'principal' : 'detalle'}
+            loading="lazy"
+          />
         </div>
       )}
       <PerfumeBadges perfume={perfume} class="absolute top-3 left-3 z-10 flex-col items-start" />
     </div>
 
     <div class="flex flex-1 flex-col gap-2 border-t border-line px-3 pt-4 pb-3 sm:px-4">
-      <p class="eyebrow truncate text-[10px] text-ink-soft">{perfume.brand}</p>
+      <p class="eyebrow truncate text-[10px] text-ink-soft">
+        {perfume.inspired ? `Inspirado en · ${perfume.brand}` : perfume.brand}
+      </p>
+      {!perfume.inspired && perfume.lines.some((l) => l !== 'original') && (
+        <p class="text-[10px] tracking-[0.12em] text-ink-soft uppercase">
+          {perfume.lines.map((l) => LINE_LABEL[l]).join(' · ')}
+        </p>
+      )}
       <h3 class="font-display text-base leading-snug sm:text-lg">
         <a
           href={href}
           class="decoration-crimson underline-offset-4 group-hover/card:underline after:absolute after:inset-0 after:content-['']"
         >
+          {perfume.inspired && <span class="sr-only">Inspirado en </span>}
           {perfume.name}
+          {perfume.inspired && <span class="sr-only"> de {perfume.brand}</span>}
         </a>
       </h3>
       <p class="price mt-auto flex flex-wrap items-baseline gap-x-2 text-sm">

@@ -25,7 +25,23 @@ export {
   variantOnSale,
 } from './lib/pricing';
 export { getPerfumeBadges, type BadgeView } from './lib/badges';
-export { CONCENTRATION_LABEL, GENDER_LABEL, HOUSE_LABEL, perfumeAlt } from './lib/labels';
+export {
+  CONCENTRATION_LABEL,
+  GENDER_LABEL,
+  HOUSE_LABEL,
+  INSPIRED_NOTICE,
+  perfumeAlt,
+  perfumeTitle,
+} from './lib/labels';
+export {
+  LINE_COLLECTION,
+  LINE_LABEL,
+  LINE_NOTICE,
+  LINE_ORDER,
+  LINE_SUMMARY,
+  linesOf,
+  offersLine,
+} from './lib/lines';
 export { default as Gallery } from './components/Gallery.astro';
 export { default as OlfactoryPyramid } from './components/OlfactoryPyramid.astro';
 export { default as PerfumeBadges } from './components/PerfumeBadges.astro';

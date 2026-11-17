@@ -1,7 +1,16 @@
+import { readSiteSettings } from '@shared/lib/firestore-build';
+
 /**
- * Número y saludo de WhatsApp. Marcadores de posición: en la fase 3 se leen de Firestore
- * (settings/site.whatsappNumber y settings/site.whatsappGreeting), editables desde el admin.
+ * Número y saludo de WhatsApp. El número se lee en el build de Firestore
+ * (settings/site.whatsappNumber, editable en /admin → Precios y ajustes). Mientras no esté
+ * configurado se usa un marcador de posición.
  */
-export const WHATSAPP_PHONE = '57XXXXXXXXXX'; // TODO(fase 3): leer de settings/site.whatsappNumber
+const settings = await readSiteSettings();
+const configured =
+  typeof settings?.whatsappNumber === 'string' && /^\d{10,15}$/.test(settings.whatsappNumber)
+    ? settings.whatsappNumber
+    : null;
+
+export const WHATSAPP_PHONE = configured ?? '57XXXXXXXXXX';
 export const WHATSAPP_GREETING = 'Hola Excentrix, quiero comprar:';
 export const WHATSAPP_GENERAL_MESSAGE = 'Hola Excentrix, quiero hacer una consulta.';

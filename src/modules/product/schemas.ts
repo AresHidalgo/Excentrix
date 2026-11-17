@@ -9,9 +9,13 @@ export type House = 'nicho' | 'disenador' | 'arabe';
 export type PerfumeBadge = 'nuevo' | 'bajo-encargo' | 'preventa';
 export type VariantType = 'decant' | 'frasco';
 export type BottleCondition = 'nuevo' | 'tester';
+/** Línea de producto: inspiración, réplica 1.1 u original (ver documents.ts). */
+export type Line = 'inspiracion' | 'replica' | 'original';
 
 export interface Variant {
   id: string;
+  /** Línea a la que pertenece esta presentación. */
+  line: Line;
   type: VariantType;
   ml: number;
   price: number;
@@ -41,14 +45,23 @@ export type BottleShape = 'tall' | 'round' | 'faceted' | 'oud';
 
 export interface Perfume {
   id: string;
+  /** Si `inspired` es true: nombre de la fragancia de referencia ("Delina"). */
   name: string;
   slug: string;
   brandId: string;
   /** Nombre de la marca ya resuelto en el build (brands/{brandId}.name). */
   brand: string;
+  /** Líneas en las que se ofrece (orden: inspiración, réplica 1.1, original). */
+  lines: Line[];
+  /**
+   * Derivado: true si el perfume se ofrece SOLO como inspiración. Entonces `name` y `brand` son la
+   * fragancia y la marca de referencia y se muestra "Inspirado en {name} de {brand}".
+   */
+  inspired?: boolean;
   description: string;
   gender: Gender;
-  concentration: Concentration;
+  /** null cuando no se conoce (catálogo importado sin ese dato). */
+  concentration: Concentration | null;
   olfactoryFamily: string[];
   notes: OlfactoryNotes;
   house: House;

@@ -3,19 +3,20 @@ import type { GetStaticPaths } from 'astro';
 import { routes } from '@shared/config/routes';
 import Container from '@shared/ui/Container.astro';
 import SectionHeading from '@shared/ui/SectionHeading.astro';
-import { getMockPerfumes, getRelatedPerfumes, ProductRow } from '@modules/catalog';
+import { getPerfumes, getRelatedPerfumes, ProductRow } from '@modules/catalog';
 import { StoreLayout } from '@modules/content';
 import {
   Gallery,
   HOUSE_LABEL,
   OlfactoryPyramid,
   PerfumeDetails,
+  perfumeTitle,
   ProductInfo,
   type Perfume,
 } from '@modules/product';
 
 export const getStaticPaths = (() =>
-  getMockPerfumes().map((perfume) => ({
+  getPerfumes().map((perfume) => ({
     params: { slug: perfume.slug },
     props: { perfume },
   }))) satisfies GetStaticPaths;
@@ -25,15 +26,17 @@ interface Props {
 }
 
 const { perfume } = Astro.props;
-const related = getRelatedPerfumes(getMockPerfumes(), perfume);
+const related = getRelatedPerfumes(getPerfumes(), perfume);
+const hasNotes = [perfume.notes.top, perfume.notes.heart, perfume.notes.base].some(
+  (n) => n.length > 0,
+);
 ---
 
 <StoreLayout
-  title={`${perfume.name} de ${perfume.brand} (maqueta)`}
+  title={perfumeTitle(perfume)}
   description={perfume.description}
   hideWhatsAppFloatOnMobile={true}
-  whatsappMessage={`Hola Excentrix, tengo una pregunta sobre ${perfume.name} – ${perfume.brand}.`}
-  noindex
+  whatsappMessage={`Hola Excentrix, tengo una pregunta sobre el perfume ${perfumeTitle(perfume).replace(/^I/, 'i')}.`}
 >
   <Container class="pt-6 pb-16 sm:pt-10 sm:pb-24">
     <nav aria-label="Ruta de navegación" class="mb-6 sm:mb-10">
@@ -64,11 +67,13 @@ const related = getRelatedPerfumes(getMockPerfumes(), perfume);
     </div>
   </Container>
 
-  <div class="border-t border-line bg-white py-16 sm:py-24">
-    <Container>
-      <OlfactoryPyramid notes={perfume.notes} />
-    </Container>
-  </div>
+  {hasNotes && (
+    <div class="border-t border-line bg-white py-16 sm:py-24">
+      <Container>
+        <OlfactoryPyramid notes={perfume.notes} />
+      </Container>
+    </div>
+  )}
 
   <Container class="py-16 sm:py-24">
     <PerfumeDetails perfume={perfume} />

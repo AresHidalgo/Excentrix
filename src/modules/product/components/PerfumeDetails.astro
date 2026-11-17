@@ -9,15 +9,21 @@ interface Props {
 
 const { perfume, class: className } = Astro.props;
 const details = [
-  { term: 'Marca', value: perfume.brand },
-  {
-    term: 'Concentración',
-    value: `${CONCENTRATION_LABEL[perfume.concentration]} (${perfume.concentration})`,
-  },
-  { term: 'Familia olfativa', value: perfume.olfactoryFamily.join(', ') },
+  perfume.inspired
+    ? { term: 'Inspirado en', value: `${perfume.name} de ${perfume.brand}` }
+    : { term: 'Marca', value: perfume.brand },
+  perfume.concentration
+    ? {
+        term: 'Concentración',
+        value: `${CONCENTRATION_LABEL[perfume.concentration]} (${perfume.concentration})`,
+      }
+    : null,
+  perfume.olfactoryFamily.length > 0
+    ? { term: 'Familia olfativa', value: perfume.olfactoryFamily.join(', ') }
+    : null,
   { term: 'Género', value: GENDER_LABEL[perfume.gender] },
   { term: 'Casa', value: HOUSE_LABEL[perfume.house] },
-];
+].filter((d): d is { term: string; value: string } => d !== null);
 ---
 
 <section

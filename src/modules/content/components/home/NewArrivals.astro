@@ -7,19 +7,30 @@ import type { Perfume } from '@modules/product';
 
 interface Props {
   perfumes: Perfume[];
+  /** Por defecto: "Nuevos lanzamientos". También se usa para "Destacados". */
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  href?: string | null;
 }
 
-const { perfumes } = Astro.props;
+const {
+  perfumes,
+  id = 'nuevos',
+  eyebrow = 'Recién llegados',
+  title = 'Nuevos lanzamientos',
+  href = routes.collection('nuevos-lanzamientos'),
+} = Astro.props;
 ---
 
-<section class="border-t border-line py-20 sm:py-28" aria-labelledby="nuevos-titulo">
+<section class="border-t border-line py-20 sm:py-28" aria-labelledby={`${id}-titulo`}>
   <Container class="flex flex-col gap-12">
     <SectionHeading
-      id="nuevos-titulo"
-      eyebrow="Recién llegados"
-      title="Nuevos lanzamientos"
-      link={{ href: routes.collection('nuevos-lanzamientos') }}
+      id={`${id}-titulo`}
+      eyebrow={eyebrow}
+      title={title}
+      link={href ? { href } : undefined}
     />
-    <ProductRow perfumes={perfumes} label="Nuevos lanzamientos" />
+    <ProductRow perfumes={perfumes} label={title} />
   </Container>
 </section>

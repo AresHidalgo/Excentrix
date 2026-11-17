@@ -2,7 +2,7 @@
 import BaseLayout from '@shared/layouts/BaseLayout.astro';
 import Container from '@shared/ui/Container.astro';
 import { routes } from '@shared/config/routes';
-import { collectionCategories, getMockCategories, getMockPerfumes } from '@modules/catalog';
+import { collectionCategories, getMockCategories, getPerfumes } from '@modules/catalog';
 import { getMockPages } from '@modules/content';
 
 const groups = [
@@ -23,7 +23,7 @@ const groups = [
   },
   {
     title: 'Fichas de perfume',
-    links: getMockPerfumes().map((p) => ({
+    links: getPerfumes().map((p) => ({
       label: `${p.name} · ${p.brand}`,
       href: routes.perfume(p.slug),
     })),

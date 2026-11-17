@@ -9,7 +9,7 @@ import {
   EmptyState,
   getCollectionPerfumes,
   getMockCategories,
-  getMockPerfumes,
+  getPerfumes,
   ProductGrid,
   toFacetItem,
   type Category,
@@ -28,12 +28,12 @@ interface Props {
 }
 
 const { category } = Astro.props;
-const perfumes = getCollectionPerfumes(getMockPerfumes(), category.slug);
+const perfumes = getCollectionPerfumes(getPerfumes(), category.slug);
 const items = perfumes.map(toFacetItem);
 const withSidebar = buildFacetGroups(items).length > 0;
 ---
 
-<StoreLayout title={`${category.name} (maqueta)`} description={category.description} noindex>
+<StoreLayout title={category.name} description={category.description}>
   <CollectionHero
     title={category.name}
     description={category.description}

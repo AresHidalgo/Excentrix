@@ -6,9 +6,13 @@
 export interface WhatsAppPerfume {
   name: string;
   brand: string;
+  /** Versión inspirada: el mensaje dice "Inspirado en {name} ({brand})". */
+  inspired?: boolean;
 }
 
 export interface WhatsAppVariant {
+  /** Línea de la presentación; el mensaje la nombra (Inspiración, Réplica 1.1, Original). */
+  line?: 'inspiracion' | 'replica' | 'original';
   type: 'decant' | 'frasco';
   ml: number;
   price: number;

@@ -1,0 +1,131 @@
+---
+/**
+ * Colección Prestigio: el inicio del catálogo (página 1 del catálogo PDF) organizado para la
+ * web en tres bloques: casas, géneros y tamaños con precio. Conteos calculados en el build.
+ */
+import Container from '@shared/ui/Container.astro';
+import Icon from '@shared/ui/Icon.astro';
+import SectionHeading from '@shared/ui/SectionHeading.astro';
+import { formatPrice } from '@shared/lib/format';
+
+interface Entry {
+  title: string;
+  text: string;
+  href: string;
+  count: number;
+}
+
+interface Size {
+  ml: number;
+  price: number;
+  note: string;
+}
+
+interface Props {
+  total: number;
+  /** Líneas de producto (Inspiración, Réplica 1.1, Original); las vacías no se muestran. */
+  lines: Entry[];
+  houses: Entry[];
+  genders: Entry[];
+  sizes: readonly Size[];
+  notice: string;
+}
+
+const { total, lines, houses, genders, sizes, notice } = Astro.props;
+const visibleLines = lines.filter((l) => l.count > 0);
+const visibleHouses = houses.filter((h) => h.count > 0);
+---
+
+<section id="coleccion-prestigio" class="py-20 sm:py-28" aria-labelledby="prestigio-titulo">
+  <Container class="flex flex-col gap-16">
+    <SectionHeading
+      id="prestigio-titulo"
+      eyebrow="Colección Prestigio"
+      title="Encuentra tu aroma inolvidable"
+      description={`Elegancia, exclusividad y variedad en cada gota: ${total} referencias inspiradas en perfumería de diseñador, nicho y árabe.`}
+    />
+
+    {visibleLines.length > 1 && (
+      <div class="flex flex-col gap-4">
+        <h3 class="eyebrow text-crimson">Elige tu versión</h3>
+        <ul class="grid gap-3 md:grid-cols-3">
+          {visibleLines.map((line) => (
+            <li>
+              <a
+                href={line.href}
+                class="group flex h-full flex-col gap-2 bg-ink p-5 text-white transition-colors hover:bg-ink/90 sm:p-6"
+              >
+                <span class="text-[10px] tracking-[0.2em] text-white/50 uppercase">
+                  {line.count} referencias
+                </span>
+                <span class="font-display text-2xl">{line.title}</span>
+                <span class="text-sm leading-relaxed text-white/70">{line.text}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div class="grid gap-px border border-line bg-line md:grid-cols-3">
+      {visibleHouses.map((house) => (
+        <a
+          href={house.href}
+          class="group flex flex-col gap-5 bg-white p-6 transition-colors duration-300 hover:bg-paper sm:p-8"
+        >
+          <span class="eyebrow text-[10px] text-ink-soft">{house.count} referencias</span>
+          <h3 class="text-3xl leading-tight sm:text-4xl">{house.title}</h3>
+          <p class="text-sm leading-relaxed text-ink-soft">{house.text}</p>
+          <span class="eyebrow mt-auto inline-flex items-center gap-2 text-[11px] text-ink transition-colors group-hover:text-crimson">
+            Ver colección
+            <Icon name="arrow-right" size={14} />
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
+      <div class="flex flex-col gap-6">
+        <h3 class="eyebrow text-crimson">Fragancias para cada género</h3>
+        <ul class="flex flex-col">
+          {genders.map((g) => (
+            <li class="border-b border-line first:border-t">
+              <a
+                href={g.href}
+                class="group flex items-baseline justify-between gap-6 py-5 transition-colors hover:text-crimson"
+              >
+                <span class="flex flex-col gap-1">
+                  <span class="font-display text-2xl leading-tight">{g.title}</span>
+                  <span class="text-sm text-ink-soft">{g.text}</span>
+                </span>
+                <span class="price shrink-0 text-sm text-ink-soft group-hover:text-crimson">
+                  {g.count}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="flex flex-col gap-6 bg-ink p-6 text-white sm:p-8">
+        <h3 class="eyebrow text-crimson-light">Elige tu tamaño</h3>
+        <ul class="flex flex-col">
+          {sizes.map((s) => (
+            <li class="flex items-baseline justify-between gap-6 border-b border-white/15 py-4 last:border-b-0">
+              <span class="flex flex-col gap-1">
+                <span class="font-display text-3xl leading-none">{s.ml} ml</span>
+                <span class="text-xs text-white/60">{s.note}</span>
+              </span>
+              <span class="price text-lg font-medium text-white">{formatPrice(s.price)}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-xs leading-relaxed text-white/50">
+          Mismo precio para todo el catálogo. Precios en pesos colombianos.
+        </p>
+      </div>
+    </div>
+
+    <p class="max-w-3xl text-xs leading-relaxed text-ink-soft">{notice}</p>
+  </Container>
+</section>
