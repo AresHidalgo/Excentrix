@@ -25,6 +25,7 @@ import {
   slugFor,
   validatePerfume,
 } from '../../lib/repository';
+import LinesEditor from './LinesEditor';
 import { Button, cloudinaryThumb, Field, inputClass, Notice, Skeleton } from './ui';
 
 type Brand = BrandDoc & { id: string };
@@ -47,7 +48,6 @@ function blankPerfume(sizes: CatalogSizeDoc[]): PerfumeDoc {
     slug: '',
     name: '',
     brandId: '',
-    inspired: true,
     description: '',
     gender: 'unisex',
     house: 'disenador',
@@ -55,7 +55,11 @@ function blankPerfume(sizes: CatalogSizeDoc[]): PerfumeDoc {
     olfactoryFamily: [],
     notes: { top: [], heart: [], base: [] },
     categoryIds: [],
-    sizes: sizes.map((s) => ({ ml: s.ml, available: true })),
+    offers: {
+      inspiracion: { active: true, sizes: sizes.map((s) => ({ ml: s.ml, available: true })) },
+      replica: { active: false, sizes: [] },
+      original: { active: false, sizes: [] },
+    },
     badges: [],
     leadTime: null,
     images: [],
@@ -110,6 +114,11 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
   if (!perfume) return <Skeleton rows={10} />;
 
   const brand = brands.find((b) => b.id === perfume.brandId);
+  // Solo inspiración activa: el sitio lo muestra como "Inspirado en …".
+  const onlyInspiration =
+    perfume.offers.inspiracion.active &&
+    !perfume.offers.replica.active &&
+    !perfume.offers.original.active;
   const update = (patch: Partial<PerfumeDoc>) => {
     setSaveState(null);
     setPerfume((current) => {
@@ -123,16 +132,6 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
   };
   const setImages = (images: PerfumeImageDoc[]) => update({ images });
 
-  function sizeOffered(ml: number) {
-    return perfume!.sizes.find((s) => s.ml === ml);
-  }
-  function toggleSize(ml: number, offered: boolean) {
-    const others = perfume!.sizes.filter((s) => s.ml !== ml);
-    update({
-      sizes: offered ? [...others, { ml, available: true }].sort((a, b) => a.ml - b.ml) : others,
-    });
-  }
-
   async function uploadFiles(fileList: FileList | null) {
     if (!fileList || !perfume) return;
     const room = 12 - perfume.images.length;
@@ -144,7 +143,7 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
       return;
     }
     const alt =
-      `Perfume ${perfume.inspired ? 'inspirado en ' : ''}${perfume.name} de ${brand?.name ?? ''}`.trim();
+      `Perfume ${onlyInspiration ? 'inspirado en ' : ''}${perfume.name} de ${brand?.name ?? ''}`.trim();
     const added: PerfumeImageDoc[] = [];
     setUpload({ done: 0, total: ok.length });
     for (const file of ok) {
@@ -170,7 +169,7 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
   async function addImages() {
     try {
       const alt =
-        `Perfume ${perfume!.inspired ? 'inspirado en ' : ''}${perfume!.name} de ${brand?.name ?? ''}`.trim();
+        `Perfume ${onlyInspiration ? 'inspirado en ' : ''}${perfume!.name} de ${brand?.name ?? ''}`.trim();
       const picked = await pickImages(perfume!.slug || 'sin-url', alt);
       const known = new Set(perfume!.images.map((i) => i.publicId));
       setImages([...perfume!.images, ...picked.filter((i) => !known.has(i.publicId))].slice(0, 12));
@@ -244,7 +243,7 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
             ← Perfumes
           </a>
           <h1 className="font-display text-3xl">
-            {isNew ? 'Nuevo perfume' : `${perfume.inspired ? 'Inspirado en ' : ''}${perfume.name}`}
+            {isNew ? 'Nuevo perfume' : `${onlyInspiration ? 'Inspirado en ' : ''}${perfume.name}`}
           </h1>
           <p className="text-xs text-ink-soft">URL: /perfume/{perfume.slug || '…'}</p>
         </div>
@@ -265,10 +264,7 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
       <div className="grid gap-8 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <div className="flex flex-col gap-6 border border-line bg-white p-6">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field
-              label={perfume.inspired ? 'Inspirado en (fragancia)' : 'Nombre'}
-              error={errors.name}
-            >
+            <Field label="Fragancia" error={errors.name}>
               <input
                 className={inputClass}
                 value={perfume.name}
@@ -342,15 +338,6 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
             </Field>
           </div>
 
-          <label className="flex items-center gap-3 text-sm">
-            <input
-              type="checkbox"
-              checked={perfume.inspired}
-              onChange={(e) => update({ inspired: e.target.checked })}
-            />
-            Versión inspirada (se muestra como “Inspirado en … de …”)
-          </label>
-
           <Field label="Descripción" error={errors.description}>
             <textarea
               rows={4}
@@ -401,49 +388,12 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
         </div>
 
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-4 border border-line bg-white p-6">
-            <h2 className="text-[11px] font-medium tracking-[0.12em] uppercase">Tamaños</h2>
-            {errors.sizes && <p className="text-xs text-crimson">Elige al menos un tamaño.</p>}
-            <ul className="flex flex-col divide-y divide-line">
-              {sizes.map((s) => {
-                const offered = sizeOffered(s.ml);
-                return (
-                  <li
-                    key={s.ml}
-                    className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm"
-                  >
-                    <label className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(offered)}
-                        onChange={(e) => toggleSize(s.ml, e.target.checked)}
-                      />
-                      {s.ml} ml
-                    </label>
-                    {offered && (
-                      <label className="flex items-center gap-2 text-xs text-ink-soft">
-                        <input
-                          type="checkbox"
-                          checked={offered.available}
-                          onChange={(e) =>
-                            update({
-                              sizes: perfume.sizes.map((x) =>
-                                x.ml === s.ml ? { ...x, available: e.target.checked } : x,
-                              ),
-                            })
-                          }
-                        />
-                        Disponible
-                      </label>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="text-xs text-ink-soft">
-              El precio de cada tamaño se edita en “Precios y ajustes”.
-            </p>
-          </div>
+          <LinesEditor
+            offers={perfume.offers}
+            catalogSizes={sizes}
+            errors={errors}
+            onChange={(offers) => update({ offers })}
+          />
 
           <div className="flex flex-col gap-4 border border-line bg-white p-6">
             <h2 className="text-[11px] font-medium tracking-[0.12em] uppercase">Etiquetas</h2>

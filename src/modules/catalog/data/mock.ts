@@ -15,6 +15,7 @@ function variant(
   extra: Partial<Pick<Variant, 'compareAtPrice' | 'available' | 'condition'>> = {},
 ): Variant {
   return {
+    line: 'original',
     id,
     type,
     ml,
@@ -49,7 +50,7 @@ const BRANDS: Brand[] = [
 
 const brandName = (id: string) => BRANDS.find((b) => b.id === id)?.name ?? id;
 
-type PerfumeSeed = Omit<Perfume, 'brand' | 'images' | 'id' | 'categoryIds'> &
+type PerfumeSeed = Omit<Perfume, 'brand' | 'images' | 'id' | 'categoryIds' | 'lines'> &
   Partial<Pick<Perfume, 'categoryIds'>>;
 
 const SEEDS: PerfumeSeed[] = [
@@ -381,10 +382,44 @@ const PERFUMES: Perfume[] = SEEDS.map((seed, i) => ({
   brand: brandName(seed.brandId),
   categoryIds: seed.categoryIds ?? [],
   images: [],
+  // Los datos de muestra son productos originales (guía de estilo y maqueta del admin).
+  lines: ['original'],
 }));
 
 /** Secciones del menú decidido (PLAN §4, "Menú inicial"). */
 const CATEGORIES: Category[] = [
+  {
+    id: 'inspiraciones',
+    name: 'Inspiraciones',
+    slug: 'inspiraciones',
+    description:
+      'Fragancias inspiradas en los grandes perfumes, en 30, 60 y 100 ml a precio fijo. No son el perfume ni el frasco de la marca.',
+    parentId: null,
+    showInMenu: true,
+    menuOrder: -3,
+    rule: 'auto',
+  },
+  {
+    id: 'replicas-1-1',
+    name: 'Réplicas 1.1',
+    slug: 'replicas-1-1',
+    description:
+      'Imitación del perfume y de su frasco. No es el perfume original ni el frasco original de la marca.',
+    parentId: null,
+    showInMenu: true,
+    menuOrder: -2,
+    rule: 'auto',
+  },
+  {
+    id: 'originales',
+    name: 'Originales',
+    slug: 'originales',
+    description: 'El perfume original de la marca.',
+    parentId: null,
+    showInMenu: true,
+    menuOrder: -1,
+    rule: 'auto',
+  },
   {
     id: 'nuevos-lanzamientos',
     name: 'Nuevos',

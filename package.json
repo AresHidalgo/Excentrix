@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "firebase:seed": "tsx --env-file-if-exists=.env scripts/firebase/seed-catalog.ts",
-    "firebase:admin": "tsx --env-file-if-exists=.env scripts/firebase/set-admin.ts"
+    "firebase:admin": "tsx --env-file-if-exists=.env scripts/firebase/set-admin.ts",
+    "firebase:migrate-offers": "tsx --env-file-if-exists=.env scripts/firebase/migrate-offers.ts"
   },
   "dependencies": {
     "@astrojs/preact": "^6.1.0",

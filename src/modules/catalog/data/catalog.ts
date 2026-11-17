@@ -1,5 +1,13 @@
 import { hasBuildCredentials, readCollection, readSiteSettings } from '@shared/lib/firestore-build';
-import type { BottleShape, Gender, House, Perfume, PerfumeImage } from '@modules/product';
+import {
+  linesOf,
+  type BottleShape,
+  type Gender,
+  type House,
+  type Perfume,
+  type PerfumeImage,
+  type Variant,
+} from '@modules/product';
 import {
   BrandDocSchema,
   CatalogSizeSchema,
@@ -67,6 +75,8 @@ function shapeFor(slug: string): BottleShape {
   return SHAPES[hash % SHAPES.length];
 }
 
+const byMl = (a: { ml: number }, b: { ml: number }) => a.ml - b.ml;
+
 /** Foto de Cloudinary encuadrada 4:5 sobre blanco (PLAN §7, fotografía). */
 function cloudinarySrc(url: string, width = 800): string {
   return url.replace('/upload/', `/upload/c_pad,ar_4:5,b_white,f_auto,q_auto,w_${width}/`);
@@ -78,6 +88,39 @@ function toPerfume(
   sizes: readonly CatalogSize[],
 ): Perfume {
   const priceOf = new Map(sizes.map((s) => [s.ml, s.price]));
+  const { inspiracion, replica, original } = doc.offers;
+  const frasco = (
+    line: Variant['line'],
+    ml: number,
+    price: number,
+    available: boolean,
+  ): Variant => ({
+    id: `${line}-${ml}`,
+    line,
+    type: 'frasco',
+    ml,
+    price,
+    compareAtPrice: null,
+    available,
+    condition: 'nuevo',
+  });
+  const variants: Variant[] = [
+    // Inspiración: precio de la tabla única (solo tamaños que existan en la tabla).
+    ...(inspiracion.active
+      ? [...inspiracion.sizes]
+          .sort(byMl)
+          .filter((s) => priceOf.has(s.ml))
+          .map((s) => frasco('inspiracion', s.ml, priceOf.get(s.ml)!, s.available))
+      : []),
+    // Réplica 1.1 y Original: precio propio del perfume.
+    ...(replica.active
+      ? [...replica.sizes].sort(byMl).map((s) => frasco('replica', s.ml, s.price, s.available))
+      : []),
+    ...(original.active
+      ? [...original.sizes].sort(byMl).map((s) => frasco('original', s.ml, s.price, s.available))
+      : []),
+  ];
+  const lines = linesOf(variants);
   const images: PerfumeImage[] = doc.images.map((img) => ({
     src: cloudinarySrc(img.url),
     alt: img.alt,
@@ -91,7 +134,9 @@ function toPerfume(
     slug: doc.slug,
     brandId: doc.brandId,
     brand: brand?.name ?? doc.brandId,
-    inspired: doc.inspired,
+    lines,
+    // Solo inspiración: se muestra "Inspirado en {name} de {brand}".
+    inspired: lines.length === 1 && lines[0] === 'inspiracion',
     description: doc.description,
     gender: doc.gender,
     concentration: doc.concentration,
@@ -99,17 +144,7 @@ function toPerfume(
     notes: doc.notes,
     house: doc.house,
     categoryIds: doc.categoryIds,
-    variants: doc.sizes
-      .filter((s) => priceOf.has(s.ml))
-      .map((s) => ({
-        id: `f${s.ml}`,
-        type: 'frasco' as const,
-        ml: s.ml,
-        price: priceOf.get(s.ml)!,
-        compareAtPrice: null,
-        available: s.available,
-        condition: 'nuevo' as const,
-      })),
+    variants,
     badges: doc.badges,
     leadTime: doc.leadTime,
     images,
@@ -176,7 +211,6 @@ function fromFiles(): CatalogData {
       slug: item.slug,
       name: item.inspiradoEn,
       brandId: item.marcaId,
-      inspired: true,
       description: `Fragancia ${GENDER_TEXT[item.genero]} inspirada en ${item.inspiradoEn} de ${brand?.name ?? item.marcaId}, de nuestra línea ${HOUSE_TEXT[house]}.`,
       gender: item.genero,
       house,
@@ -184,7 +218,14 @@ function fromFiles(): CatalogData {
       olfactoryFamily: [],
       notes: { top: [], heart: [], base: [] },
       categoryIds: [],
-      sizes: CATALOG_SIZES.map((s) => ({ ml: s.ml, available: true })),
+      offers: {
+        inspiracion: {
+          active: true,
+          sizes: CATALOG_SIZES.map((s) => ({ ml: s.ml, available: true })),
+        },
+        replica: { active: false, sizes: [] },
+        original: { active: false, sizes: [] },
+      },
       badges: [],
       leadTime: null,
       images: [],

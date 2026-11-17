@@ -23,13 +23,16 @@ interface Size {
 
 interface Props {
   total: number;
+  /** Líneas de producto (Inspiración, Réplica 1.1, Original); las vacías no se muestran. */
+  lines: Entry[];
   houses: Entry[];
   genders: Entry[];
   sizes: readonly Size[];
   notice: string;
 }
 
-const { total, houses, genders, sizes, notice } = Astro.props;
+const { total, lines, houses, genders, sizes, notice } = Astro.props;
+const visibleLines = lines.filter((l) => l.count > 0);
 const visibleHouses = houses.filter((h) => h.count > 0);
 ---
 
@@ -41,6 +44,28 @@ const visibleHouses = houses.filter((h) => h.count > 0);
       title="Encuentra tu aroma inolvidable"
       description={`Elegancia, exclusividad y variedad en cada gota: ${total} referencias inspiradas en perfumería de diseñador, nicho y árabe.`}
     />
+
+    {visibleLines.length > 1 && (
+      <div class="flex flex-col gap-4">
+        <h3 class="eyebrow text-crimson">Elige tu versión</h3>
+        <ul class="grid gap-3 md:grid-cols-3">
+          {visibleLines.map((line) => (
+            <li>
+              <a
+                href={line.href}
+                class="group flex h-full flex-col gap-2 bg-ink p-5 text-white transition-colors hover:bg-ink/90 sm:p-6"
+              >
+                <span class="text-[10px] tracking-[0.2em] text-white/50 uppercase">
+                  {line.count} referencias
+                </span>
+                <span class="font-display text-2xl">{line.title}</span>
+                <span class="text-sm leading-relaxed text-white/70">{line.text}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
     <div class="grid gap-px border border-line bg-line md:grid-cols-3">
       {visibleHouses.map((house) => (

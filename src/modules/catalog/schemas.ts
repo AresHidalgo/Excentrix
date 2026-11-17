@@ -34,6 +34,8 @@ export interface FacetItem {
   gender: 'hombre' | 'mujer' | 'unisex';
   brand: string;
   families: string[];
+  /** Líneas: inspiracion, replica, original. */
+  lines: ('inspiracion' | 'replica' | 'original')[];
   presentations: ('decant' | 'frasco')[];
   sizes: number[];
   priceFrom: number;
@@ -44,6 +46,7 @@ export interface FacetItem {
 }
 
 export interface FilterState {
+  lines: string[];
   genders: string[];
   brands: string[];
   families: string[];
