@@ -11,7 +11,9 @@ service cloud.firestore {
 
     match /perfumes/{id} {
       allow read: if resource.data.status == 'published' || isAdmin();
-      allow write: if isAdmin();
+      // El id del documento es el slug (la URL del perfume): deben coincidir.
+      allow create, update: if isAdmin() && request.resource.data.slug == id;
+      allow delete: if isAdmin();
     }
 
     match /categories/{id} {

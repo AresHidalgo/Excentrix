@@ -6,6 +6,7 @@ import {
   buildWhatsAppUrl,
   WHATSAPP_PHONE,
 } from '@modules/whatsapp';
+import { LINE_LABEL, LINE_NOTICE, LINE_ORDER } from '../lib/lines';
 import { cheapestVariant, variantDiscount } from '../lib/pricing';
 import type { Perfume } from '../schemas';
 import PresentationSelector, { type PresentationOption } from './PresentationSelector.tsx';
@@ -18,11 +19,22 @@ const { perfume } = Astro.props;
 const url = new URL(routes.perfume(perfume.slug), Astro.site).href;
 
 // Los enlaces de WhatsApp se arman aquí (servidor) para que la isla no importe otros módulos.
-const ordered = [...perfume.variants].sort((a, b) =>
-  a.type === b.type ? a.ml - b.ml : a.type === 'decant' ? -1 : 1,
+// Orden: por línea (inspiración, réplica 1.1, original), luego decants antes que frascos, luego ml.
+const typeRank = (t: string) => (t === 'decant' ? 0 : 1);
+const ordered = [...perfume.variants].sort(
+  (a, b) =>
+    LINE_ORDER.indexOf(a.line) - LINE_ORDER.indexOf(b.line) ||
+    typeRank(a.type) - typeRank(b.type) ||
+    a.ml - b.ml,
 );
+// Con una sola línea "original" (datos de muestra) se conserva el título clásico del grupo.
+const showLineTitles = !(perfume.lines.length === 1 && perfume.lines[0] === 'original');
 const options: PresentationOption[] = ordered.map((v) => ({
   id: v.id,
+  groupKey: `${v.line}:${v.type}`,
+  groupTitle:
+    v.type === 'decant' ? 'Decant' : showLineTitles ? LINE_LABEL[v.line] : 'Frasco completo',
+  groupNotice: showLineTitles ? LINE_NOTICE[v.line] : null,
   type: v.type,
   ml: v.ml,
   tester: v.condition === 'tester',

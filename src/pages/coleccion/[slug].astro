@@ -33,7 +33,7 @@ const items = perfumes.map(toFacetItem);
 const withSidebar = buildFacetGroups(items).length > 0;
 ---
 
-<StoreLayout title={`${category.name} (maqueta)`} description={category.description} noindex>
+<StoreLayout title={category.name} description={category.description}>
   <CollectionHero
     title={category.name}
     description={category.description}

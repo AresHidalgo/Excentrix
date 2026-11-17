@@ -26,10 +26,19 @@ const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), selec
  * tarjetas (atributo hidden + CSS order) sin volver a dibujarlas. Escritorio: barra lateral.
  * Móvil: panel inferior con foco atrapado y cierre con Escape.
  */
+/** Perfumes por tanda en las colecciones. */
+const PAGE_SIZE = 24;
+/** Filtros con más opciones que esto muestran un buscador y se desplazan. */
+const LONG_GROUP = 12;
+
 export default function CollectionBrowser({ items, children, empty }: Props) {
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortKey>('destacados');
   const [open, setOpen] = useState(false);
+  /** Cuántos perfumes se muestran: crece de a PAGE_SIZE con "Ver más". */
+  const [limit, setLimit] = useState(PAGE_SIZE);
+  /** Texto para buscar dentro de filtros largos (p. ej. las más de 100 marcas). */
+  const [optionQuery, setOptionQuery] = useState<Record<string, string>>({});
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -46,14 +55,17 @@ export default function CollectionBrowser({ items, children, empty }: Props) {
   const active = countActiveFilters(filters);
   const hasFilters = groups.length > 0;
 
+  // Al cambiar filtros u orden se vuelve a la primera tanda.
+  useEffect(() => setLimit(PAGE_SIZE), [filters, sort]);
+
   useEffect(() => {
     const order = new Map(visible.map((item, index) => [item.slug, index]));
     rootRef.current?.querySelectorAll<HTMLElement>('[data-slug]').forEach((card) => {
       const index = order.get(card.dataset.slug ?? '');
-      card.hidden = index === undefined;
+      card.hidden = index === undefined || index >= limit;
       card.style.order = index === undefined ? '' : String(index);
     });
-  }, [visible]);
+  }, [visible, limit]);
 
   useEffect(() => {
     if (!open) return;
@@ -184,32 +196,58 @@ export default function CollectionBrowser({ items, children, empty }: Props) {
                     <legend class="eyebrow float-left mb-3 w-full text-[10px] text-ink-soft">
                       {group.title}
                     </legend>
-                    <div class="clear-left flex flex-col">
-                      {group.options.map((option) => {
-                        const checked = filters[group.key].includes(option.value);
-                        return (
-                          <label
-                            key={option.value}
-                            class="flex cursor-pointer items-center gap-3 py-1.5 text-sm text-ink"
-                          >
-                            <span class="relative grid size-4 shrink-0 place-items-center">
-                              <input
-                                type="checkbox"
-                                class="peer size-4 appearance-none rounded-none border border-ink-soft bg-white transition-colors checked:border-ink checked:bg-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
-                                checked={checked}
-                                onChange={() => toggle(group.key, option.value)}
-                              />
-                              <Icon
-                                name="check"
-                                size={12}
-                                class="pointer-events-none absolute text-white opacity-0 peer-checked:opacity-100"
-                              />
-                            </span>
-                            <span class="flex-1">{option.label}</span>
-                            <span class="price text-xs text-ink-soft">{option.count}</span>
-                          </label>
-                        );
-                      })}
+                    {group.options.length > LONG_GROUP && (
+                      <input
+                        type="search"
+                        aria-label={`Buscar en ${group.title}`}
+                        placeholder={`Buscar ${group.title.toLowerCase()}…`}
+                        value={optionQuery[group.key] ?? ''}
+                        onInput={(e) =>
+                          setOptionQuery((q) => ({
+                            ...q,
+                            [group.key]: (e.target as HTMLInputElement).value,
+                          }))
+                        }
+                        class="clear-left mb-3 w-full border border-line bg-white px-3 py-2 text-sm outline-none focus:border-ink"
+                      />
+                    )}
+                    <div
+                      class={`clear-left flex flex-col ${group.options.length > LONG_GROUP ? 'max-h-72 overflow-y-auto pr-1' : ''}`}
+                    >
+                      {group.options
+                        .filter((option) => {
+                          const q = (optionQuery[group.key] ?? '').trim().toLowerCase();
+                          return (
+                            !q ||
+                            option.label.toLowerCase().includes(q) ||
+                            filters[group.key].includes(option.value)
+                          );
+                        })
+                        .map((option) => {
+                          const checked = filters[group.key].includes(option.value);
+                          return (
+                            <label
+                              key={option.value}
+                              class="flex cursor-pointer items-center gap-3 py-1.5 text-sm text-ink"
+                            >
+                              <span class="relative grid size-4 shrink-0 place-items-center">
+                                <input
+                                  type="checkbox"
+                                  class="peer size-4 appearance-none rounded-none border border-ink-soft bg-white transition-colors checked:border-ink checked:bg-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crimson"
+                                  checked={checked}
+                                  onChange={() => toggle(group.key, option.value)}
+                                />
+                                <Icon
+                                  name="check"
+                                  size={12}
+                                  class="pointer-events-none absolute text-white opacity-0 peer-checked:opacity-100"
+                                />
+                              </span>
+                              <span class="flex-1">{option.label}</span>
+                              <span class="price text-xs text-ink-soft">{option.count}</span>
+                            </label>
+                          );
+                        })}
                     </div>
                   </fieldset>
                 ))}
@@ -233,6 +271,20 @@ export default function CollectionBrowser({ items, children, empty }: Props) {
 
         <div>
           <div hidden={visible.length === 0}>{children}</div>
+          {visible.length > limit && (
+            <div class="mt-10 flex flex-col items-center gap-3">
+              <p class="text-sm text-ink-soft">
+                Mostrando {Math.min(limit, visible.length)} de {visible.length}
+              </p>
+              <button
+                type="button"
+                class={buttonClass('outline', 'md')}
+                onClick={() => setLimit((n) => n + PAGE_SIZE)}
+              >
+                Ver más perfumes
+              </button>
+            </div>
+          )}
           <div hidden={visible.length > 0}>{empty}</div>
         </div>
       </div>

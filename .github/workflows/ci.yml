@@ -24,11 +24,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
+      - run: pnpm test
       - run: pnpm run format:check
       - run: pnpm run check
       - run: pnpm run build
         env:
           PUBLIC_SITE_URL: https://excentrix.web.app
+          # Lee el catálogo de Firestore; en PRs desde forks no hay secreto y usa los archivos.
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          PUBLIC_FIREBASE_API_KEY: ${{ vars.PUBLIC_FIREBASE_API_KEY }}
+          PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ vars.PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          PUBLIC_FIREBASE_PROJECT_ID: ${{ vars.PUBLIC_FIREBASE_PROJECT_ID }}
+          PUBLIC_FIREBASE_APP_ID: ${{ vars.PUBLIC_FIREBASE_APP_ID }}
+          PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ vars.PUBLIC_CLOUDINARY_CLOUD_NAME }}
+          PUBLIC_CLOUDINARY_API_KEY: ${{ vars.PUBLIC_CLOUDINARY_API_KEY }}
+          PUBLIC_CLOUDINARY_UPLOAD_PRESET: ${{ vars.PUBLIC_CLOUDINARY_UPLOAD_PRESET }}
 
       - uses: actions/upload-artifact@v4
         with:

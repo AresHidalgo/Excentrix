@@ -7,6 +7,7 @@ import type { FacetGroup, FacetItem, FacetOption, FilterState } from '../schemas
  */
 
 export const EMPTY_FILTERS: FilterState = {
+  lines: [],
   genders: [],
   brands: [],
   families: [],
@@ -34,6 +35,11 @@ const GENDER_LABELS: Record<string, string> = {
   unisex: 'Unisex',
 };
 const PRESENTATION_LABELS: Record<string, string> = { decant: 'Decant', frasco: 'Frasco completo' };
+const LINE_LABELS: Record<string, string> = {
+  inspiracion: 'Inspiración',
+  replica: 'Réplica 1.1',
+  original: 'Original',
+};
 
 function inRange(price: number, value: string): boolean {
   const range = PRICE_RANGES.find((r) => r.value === value);
@@ -43,6 +49,8 @@ function inRange(price: number, value: string): boolean {
 /** Valores de cada filtro para un perfume (los que pueden coincidir). */
 function valuesOf(item: FacetItem, key: keyof FilterState): string[] {
   switch (key) {
+    case 'lines':
+      return item.lines;
     case 'genders':
       return [item.gender];
     case 'brands':
@@ -91,6 +99,16 @@ export function buildFacetGroups(items: readonly FacetItem[]): FacetGroup[] {
   const rangeOrder = (a: string, b: string) =>
     PRICE_RANGES.findIndex((r) => r.value === a) - PRICE_RANGES.findIndex((r) => r.value === b);
   const groups: FacetGroup[] = [
+    {
+      key: 'lines',
+      title: 'Versión',
+      options: options(
+        items,
+        'lines',
+        (v) => LINE_LABELS[v] ?? v,
+        (a, b) => Object.keys(LINE_LABELS).indexOf(a) - Object.keys(LINE_LABELS).indexOf(b),
+      ),
+    },
     {
       key: 'genders',
       title: 'Género',

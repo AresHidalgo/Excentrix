@@ -1,0 +1,15 @@
+---
+/**
+ * Envoltorio de la isla de búsqueda. Las islas se importan con ruta relativa dentro de su
+ * módulo para que el filtro de Preact (astro.config.mjs) las reconozca.
+ */
+import SearchResults, { type SearchItem } from './SearchResults.tsx';
+
+interface Props {
+  items: SearchItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<SearchResults items={items} client:load />

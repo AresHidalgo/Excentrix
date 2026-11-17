@@ -19,11 +19,13 @@ export {
 export {
   countCollection,
   getBrands,
+  getCatalogSizes,
+  getCatalogSource,
   getCategories,
   getPerfumeBySlug,
   getPerfumes,
 } from './data/catalog';
-export { CATALOG_SIZES, getCatalogSizes, type CatalogSize } from './data/pricing';
+export { CATALOG_SIZES, type CatalogSize } from './data/pricing';
 export {
   buildMenu,
   collectionCategories,

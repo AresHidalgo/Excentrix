@@ -33,6 +33,15 @@ export {
   perfumeAlt,
   perfumeTitle,
 } from './lib/labels';
+export {
+  LINE_COLLECTION,
+  LINE_LABEL,
+  LINE_NOTICE,
+  LINE_ORDER,
+  LINE_SUMMARY,
+  linesOf,
+  offersLine,
+} from './lib/lines';
 export { default as Gallery } from './components/Gallery.astro';
 export { default as OlfactoryPyramid } from './components/OlfactoryPyramid.astro';
 export { default as PerfumeBadges } from './components/PerfumeBadges.astro';
