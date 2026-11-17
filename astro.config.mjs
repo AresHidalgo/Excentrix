@@ -6,7 +6,14 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
 
-const { PUBLIC_SITE_URL } = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
+const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
+const { PUBLIC_SITE_URL } = env;
+
+// Credenciales de Firestore para leer el catálogo en el build (src/shared/lib/firestore-build.ts).
+// En CI llegan como variables de entorno; en local, desde .env.
+for (const key of ['FIREBASE_SERVICE_ACCOUNT', 'GOOGLE_APPLICATION_CREDENTIALS']) {
+  if (!process.env[key] && env[key]) process.env[key] = env[key];
+}
 
 // https://astro.build/config
 export default defineConfig({

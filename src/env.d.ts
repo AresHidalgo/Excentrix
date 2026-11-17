@@ -10,6 +10,8 @@ interface ImportMetaEnv {
   // Cloudinary (valores públicos)
   readonly PUBLIC_CLOUDINARY_CLOUD_NAME?: string;
   readonly PUBLIC_CLOUDINARY_API_KEY?: string;
+  /** Upload preset sin firma, restringido a la carpeta excentrix/perfumes. */
+  readonly PUBLIC_CLOUDINARY_UPLOAD_PRESET?: string;
 }
 
 interface ImportMeta {

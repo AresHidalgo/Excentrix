@@ -15,7 +15,3 @@ export const CATALOG_SIZES: readonly CatalogSize[] = [
   { ml: 60, price: 60000, note: 'Perfecto para viajar' },
   { ml: 100, price: 100000, note: 'Aroma distintivo diario' },
 ];
-
-export function getCatalogSizes(): readonly CatalogSize[] {
-  return CATALOG_SIZES;
-}

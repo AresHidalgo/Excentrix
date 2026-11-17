@@ -8,7 +8,13 @@ import {
   type PerfumeDoc,
   type PerfumeImageDoc,
 } from '@modules/product/documents';
-import { isCloudinaryConfigured, pickImages } from '../../lib/cloudinary';
+import {
+  checkFiles,
+  isCloudinaryConfigured,
+  isUploadConfigured,
+  pickImages,
+  uploadImage,
+} from '../../lib/cloudinary';
 import {
   createPerfume,
   deletePerfume,
@@ -72,6 +78,7 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
     null,
   );
   const [busy, setBusy] = useState(false);
+  const [upload, setUpload] = useState<{ done: number; total: number } | null>(null);
   // Textos libres separados por comas (se convierten en listas al guardar).
   const [texts, setTexts] = useState({ families: '', top: '', heart: '', base: '' });
 
@@ -124,6 +131,40 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
     update({
       sizes: offered ? [...others, { ml, available: true }].sort((a, b) => a.ml - b.ml) : others,
     });
+  }
+
+  async function uploadFiles(fileList: FileList | null) {
+    if (!fileList || !perfume) return;
+    const room = 12 - perfume.images.length;
+    const { ok, rejected } = checkFiles(Array.from(fileList).slice(0, room));
+    const problems = [...rejected];
+    if (fileList.length > room) problems.push(`Solo caben ${room} foto(s) más (máximo 12).`);
+    if (ok.length === 0) {
+      if (problems.length) setSaveState({ tone: 'error', text: problems.join(' ') });
+      return;
+    }
+    const alt =
+      `Perfume ${perfume.inspired ? 'inspirado en ' : ''}${perfume.name} de ${brand?.name ?? ''}`.trim();
+    const added: PerfumeImageDoc[] = [];
+    setUpload({ done: 0, total: ok.length });
+    for (const file of ok) {
+      try {
+        added.push(await uploadImage(file, perfume.slug, alt));
+      } catch (error) {
+        problems.push((error as Error).message);
+      }
+      setUpload((u) => (u ? { ...u, done: u.done + 1 } : u));
+    }
+    setUpload(null);
+    if (added.length) setImages([...perfume.images, ...added].slice(0, 12));
+    setSaveState(
+      problems.length
+        ? { tone: 'error', text: problems.join(' ') }
+        : {
+            tone: 'success',
+            text: `${added.length} foto(s) subida(s) a Cloudinary. Pulsa “Guardar” para guardarlas en el perfume.`,
+          },
+    );
   }
 
   async function addImages() {
@@ -459,14 +500,42 @@ export default function PerfumeEditor({ slug }: { slug: string | null }) {
               máximo 12
             </p>
           </div>
-          <Button
-            tone="outline"
-            onClick={addImages}
-            disabled={!isCloudinaryConfigured() || !perfume.slug || perfume.images.length >= 12}
-          >
-            Agregar desde Cloudinary
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <label
+              className={`inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 bg-ink px-4 text-xs font-medium tracking-[0.12em] text-white uppercase transition-colors hover:bg-ink/85 ${!isUploadConfigured() || !perfume.slug || perfume.images.length >= 12 || upload ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              {upload ? `Subiendo ${upload.done}/${upload.total}…` : 'Subir fotos'}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/avif"
+                multiple
+                className="sr-only"
+                disabled={
+                  !isUploadConfigured() ||
+                  !perfume.slug ||
+                  perfume.images.length >= 12 ||
+                  Boolean(upload)
+                }
+                onChange={(e) => {
+                  void uploadFiles(e.target.files);
+                  e.target.value = '';
+                }}
+              />
+            </label>
+            <Button
+              tone="outline"
+              onClick={addImages}
+              disabled={!isCloudinaryConfigured() || !perfume.slug || perfume.images.length >= 12}
+            >
+              Elegir de la biblioteca
+            </Button>
+          </div>
         </div>
+        {!isUploadConfigured() && (
+          <Notice tone="error">
+            Para subir fotos falta el upload preset de Cloudinary (PUBLIC_CLOUDINARY_UPLOAD_PRESET).
+          </Notice>
+        )}
         {!isCloudinaryConfigured() && (
           <Notice tone="error">Falta configurar Cloudinary (PUBLIC_CLOUDINARY_*).</Notice>
         )}

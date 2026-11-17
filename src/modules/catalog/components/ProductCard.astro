@@ -33,6 +33,9 @@ const cheapest = cheapestVariant(perfume);
 const soldOut = cheapest === null;
 const onSale = cheapest !== null && variantOnSale(cheapest);
 const alt = perfumeAlt(perfume.name, perfume.brand, undefined, perfume.inspired);
+// Fotos de Cloudinary si existen: la segunda aparece al pasar el mouse.
+const mainImage = perfume.images[0];
+const hoverImage = perfume.images[1];
 
 // Acceso rápido (PLAN §5): con un solo tamaño va directo a WhatsApp; con varios, a la ficha.
 const quick = soldOut
@@ -59,17 +62,30 @@ const quick = soldOut
       <div
         class:list={[
           'transition-opacity duration-500 ease-(--ease-luxe)',
-          soldOut ? 'opacity-50 grayscale' : 'group-hover/card:opacity-0',
+          soldOut
+            ? 'opacity-50 grayscale'
+            : (hoverImage || !mainImage) && 'group-hover/card:opacity-0',
         ]}
       >
-        <ProductImage alt={alt} shape={perfume.shape} loading={loading} />
+        <ProductImage
+          src={mainImage?.src}
+          alt={mainImage?.alt ?? alt}
+          shape={perfume.shape}
+          loading={loading}
+        />
       </div>
-      {!soldOut && (
+      {!soldOut && (hoverImage || !mainImage) && (
         <div
           aria-hidden="true"
           class="absolute inset-0 opacity-0 transition-opacity duration-500 ease-(--ease-luxe) group-hover/card:opacity-100"
         >
-          <ProductImage alt="" shape={perfume.shape} variant="detalle" loading="lazy" />
+          <ProductImage
+            src={hoverImage?.src}
+            alt=""
+            shape={perfume.shape}
+            variant={hoverImage ? 'principal' : 'detalle'}
+            loading="lazy"
+          />
         </div>
       )}
       <PerfumeBadges perfume={perfume} class="absolute top-3 left-3 z-10 flex-col items-start" />

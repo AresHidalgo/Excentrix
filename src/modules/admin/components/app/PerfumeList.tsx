@@ -7,6 +7,9 @@ import { Button, inputClass, Notice, Skeleton } from './ui';
 const HOUSE_LABEL = { nicho: 'Nicho', disenador: 'Diseñador', arabe: 'Árabe' } as const;
 const GENDER_LABEL = { hombre: 'Hombre', mujer: 'Mujer', unisex: 'Unisex' } as const;
 
+/** Perfumes por página en la tabla. */
+const PAGE_SIZE = 25;
+
 function normalize(text: string): string {
   return text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
@@ -20,6 +23,7 @@ export default function PerfumeList() {
   const [gender, setGender] = useState('');
   const [status, setStatus] = useState('');
   const [reload, setReload] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     let alive = true;
@@ -49,6 +53,18 @@ export default function PerfumeList() {
       return true;
     });
   }, [perfumes, brands, query, house, gender, status]);
+
+  // Al cambiar la búsqueda o un filtro se vuelve a la primera página.
+  useEffect(() => setPage(1), [query, house, gender, status]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const visible = filtered.slice(start, start + PAGE_SIZE);
+  const goTo = (n: number) => {
+    setPage(Math.min(Math.max(1, n), pageCount));
+    window.scrollTo({ top: 0 });
+  };
 
   const clear = () => {
     setQuery('');
@@ -149,7 +165,7 @@ export default function PerfumeList() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((p) => (
+              {visible.map((p) => (
                 <tr key={p.slug} className="border-b border-line last:border-b-0 hover:bg-paper">
                   <td className="px-4 py-3">
                     <a
@@ -180,6 +196,52 @@ export default function PerfumeList() {
             </tbody>
           </table>
         </div>
+      )}
+
+      {filtered.length > PAGE_SIZE && (
+        <nav
+          aria-label="Paginación"
+          className="flex flex-wrap items-center justify-between gap-3 text-sm"
+        >
+          <p className="text-ink-soft">
+            {start + 1}–{Math.min(start + PAGE_SIZE, filtered.length)} de {filtered.length}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              tone="outline"
+              onClick={() => goTo(1)}
+              disabled={currentPage === 1}
+              aria-label="Primera página"
+            >
+              «
+            </Button>
+            <Button
+              tone="outline"
+              onClick={() => goTo(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </Button>
+            <span className="px-2 text-ink" aria-current="page">
+              Página {currentPage} de {pageCount}
+            </span>
+            <Button
+              tone="outline"
+              onClick={() => goTo(currentPage + 1)}
+              disabled={currentPage === pageCount}
+            >
+              Siguiente
+            </Button>
+            <Button
+              tone="outline"
+              onClick={() => goTo(pageCount)}
+              disabled={currentPage === pageCount}
+              aria-label="Última página"
+            >
+              »
+            </Button>
+          </div>
+        </nav>
       )}
     </section>
   );
