@@ -8,6 +8,9 @@ import PerfumeList from './PerfumeList';
 import PricesEditor from './PricesEditor';
 import { Button, Notice } from './ui';
 
+/** Workflow de deploy en GitHub: "Run workflow" reconstruye el sitio con lo guardado en Firestore. */
+const PUBLISH_URL = 'https://github.com/AresHidalgo/Excentrix/actions/workflows/deploy.yml';
+
 /** Rutas internas por hash: #/perfumes · #/perfume/{slug} · #/nuevo · #/precios */
 type Route =
   { view: 'list' } | { view: 'edit'; slug: string } | { view: 'new' } | { view: 'prices' };
@@ -96,6 +99,19 @@ export default function AdminApp() {
             </a>
           ))}
         </nav>
+        <div className="flex flex-col gap-2 border-t border-white/10 pt-4">
+          <a
+            href={PUBLISH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-10 items-center justify-center bg-crimson px-4 text-xs font-medium tracking-[0.12em] text-white uppercase transition-colors hover:bg-crimson-hover"
+          >
+            Publicar cambios
+          </a>
+          <p className="text-[11px] leading-relaxed text-white/50">
+            Abre GitHub: pulsa “Run workflow”. En 2 a 3 minutos el sitio muestra lo guardado aquí.
+          </p>
+        </div>
         <div className="mt-auto hidden flex-col gap-2 text-xs text-white/50 lg:flex">
           <span className="truncate">{session.user.email}</span>
           <button

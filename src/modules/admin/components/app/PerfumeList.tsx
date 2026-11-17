@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { BrandDoc, PerfumeDoc } from '@modules/product/documents';
 import { listBrands, listPerfumes } from '../../lib/repository';
-import { Button, inputClass, Notice, Skeleton } from './ui';
+import { Button, cloudinaryThumb, inputClass, Notice, Skeleton } from './ui';
 
 const HOUSE_LABEL = { nicho: 'Nicho', disenador: 'Diseñador', arabe: 'Árabe' } as const;
 const GENDER_LABEL = { hombre: 'Hombre', mujer: 'Mujer', unisex: 'Unisex' } as const;
@@ -36,6 +36,26 @@ function useIsDesktop(): boolean {
     return () => media.removeEventListener('change', onChange);
   }, []);
   return desktop;
+}
+
+/** Miniatura 4:5 de la foto principal, o un recuadro vacío si el perfume no tiene fotos. */
+function Thumb({ perfume }: { perfume: PerfumeDoc }) {
+  const main = perfume.images[0];
+  return main ? (
+    <img
+      src={cloudinaryThumb(main.url, 96)}
+      alt=""
+      width={40}
+      height={50}
+      loading="lazy"
+      className="h-[50px] w-10 shrink-0 border border-line bg-white object-contain"
+    />
+  ) : (
+    <span
+      aria-hidden="true"
+      className="block h-[50px] w-10 shrink-0 border border-dashed border-line bg-paper"
+    />
+  );
 }
 
 function normalize(text: string): string {
@@ -207,7 +227,8 @@ export default function PerfumeList() {
                 className="flex flex-col gap-2 border border-line bg-white p-4 active:bg-paper"
               >
                 <span className="flex items-start justify-between gap-3">
-                  <span className="flex min-w-0 flex-col">
+                  <Thumb perfume={p} />
+                  <span className="flex min-w-0 flex-1 flex-col">
                     <span className="font-medium">
                       {onlyInspiration(p) && <span className="text-ink-soft">Inspirado en </span>}
                       {p.name}
@@ -254,14 +275,19 @@ export default function PerfumeList() {
                   <td className="px-4 py-3">
                     <a
                       href={`#/perfume/${encodeURIComponent(p.slug)}`}
-                      className="flex flex-col hover:text-crimson"
+                      className="flex items-center gap-3 hover:text-crimson"
                     >
-                      <span className="font-medium">
-                        {onlyInspiration(p) && <span className="text-ink-soft">Inspirado en </span>}
-                        {p.name}
-                      </span>
-                      <span className="text-xs text-ink-soft">
-                        {brands.get(p.brandId)?.name ?? p.brandId}
+                      <Thumb perfume={p} />
+                      <span className="flex flex-col">
+                        <span className="font-medium">
+                          {onlyInspiration(p) && (
+                            <span className="text-ink-soft">Inspirado en </span>
+                          )}
+                          {p.name}
+                        </span>
+                        <span className="text-xs text-ink-soft">
+                          {brands.get(p.brandId)?.name ?? p.brandId}
+                        </span>
                       </span>
                     </a>
                   </td>
