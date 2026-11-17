@@ -15,6 +15,6 @@ interface Props {
 const { page } = Astro.props;
 ---
 
-<StoreLayout title={`${page.title} (maqueta)`} description={page.intro} noindex>
+<StoreLayout title={page.title} description={page.intro}>
   <ContentArticle page={page} />
 </StoreLayout>

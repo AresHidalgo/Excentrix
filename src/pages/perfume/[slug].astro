@@ -33,11 +33,10 @@ const hasNotes = [perfume.notes.top, perfume.notes.heart, perfume.notes.base].so
 ---
 
 <StoreLayout
-  title={`${perfumeTitle(perfume)} (maqueta)`}
+  title={perfumeTitle(perfume)}
   description={perfume.description}
   hideWhatsAppFloatOnMobile={true}
   whatsappMessage={`Hola Excentrix, tengo una pregunta sobre el perfume ${perfumeTitle(perfume).replace(/^I/, 'i')}.`}
-  noindex
 >
   <Container class="pt-6 pb-16 sm:pt-10 sm:pb-24">
     <nav aria-label="Ruta de navegación" class="mb-6 sm:mb-10">
