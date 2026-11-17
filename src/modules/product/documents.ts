@@ -4,7 +4,7 @@ import { z } from 'zod';
  * Modelo de los documentos en Firestore (base "default" de excentrix-e7794).
  * Lo comparten el admin (lee/escribe), los scripts (carga inicial) y el build (lee).
  *
- *   perfumes/{slug}   PerfumeDoc
+ *   perfumes/{slug}   PerfumeDoc       (un perfume puede ofrecerse en 1 a 3 líneas: offers)
  *   brands/{id}       BrandDoc
  *   settings/site     SiteSettingsDoc  (tamaños y precios, WhatsApp, barra de anuncio)
  */
@@ -15,6 +15,13 @@ export const CONCENTRATIONS = ['EDT', 'EDP', 'Parfum', 'Extrait'] as const;
 export const BADGES = ['nuevo', 'bajo-encargo', 'preventa'] as const;
 export const IMAGE_KINDS = ['producto', 'ambiente'] as const;
 export const STATUSES = ['draft', 'published'] as const;
+/**
+ * Líneas de producto:
+ *   inspiracion  versión inspirada; tamaños con la tabla de precios única (settings/site.sizes)
+ *   replica      réplica 1.1 (imitación del perfume y del frasco); precio por perfume
+ *   original     producto original de la marca; precio por perfume
+ */
+export const LINES = ['inspiracion', 'replica', 'original'] as const;
 
 const slug = z
   .string()
@@ -38,18 +45,49 @@ export const PerfumeImageSchema = z.object({
   height: z.number().int().positive().nullable(),
 });
 
-/** Tamaño ofrecido por el perfume. El precio viene de settings/site.sizes. */
+/** Tamaño de la línea Inspiración. El precio viene de settings/site.sizes. */
 export const PerfumeSizeSchema = z.object({
   ml: z.number().int().positive(),
   available: z.boolean(),
 });
 
+/** Tamaño con precio propio (líneas Réplica 1.1 y Original), en COP. */
+export const PricedSizeSchema = z.object({
+  ml: z.number().int().positive(),
+  price: z.number().int().positive('El precio debe ser mayor que 0'),
+  available: z.boolean(),
+});
+
+const activeNeedsSizes = <T extends { active: boolean; sizes: unknown[] }>(offer: T) =>
+  !offer.active || offer.sizes.length > 0;
+const uniqueMl = (sizes: { ml: number }[]) => new Set(sizes.map((s) => s.ml)).size === sizes.length;
+
+export const InspirationOfferSchema = z
+  .object({ active: z.boolean(), sizes: z.array(PerfumeSizeSchema).max(10) })
+  .refine(activeNeedsSizes, { message: 'Elige al menos un tamaño', path: ['sizes'] })
+  .refine((o) => uniqueMl(o.sizes), { message: 'Hay tamaños repetidos', path: ['sizes'] });
+
+export const PricedOfferSchema = z
+  .object({ active: z.boolean(), sizes: z.array(PricedSizeSchema).max(10) })
+  .refine(activeNeedsSizes, { message: 'Agrega al menos un tamaño con precio', path: ['sizes'] })
+  .refine((o) => uniqueMl(o.sizes), { message: 'Hay tamaños repetidos', path: ['sizes'] });
+
+export const OffersSchema = z
+  .object({
+    inspiracion: InspirationOfferSchema,
+    replica: PricedOfferSchema,
+    original: PricedOfferSchema,
+  })
+  .refine((o) => LINES.some((line) => o[line].active), {
+    message: 'Activa al menos una línea (Inspiración, Réplica 1.1 u Original)',
+    path: ['_'],
+  });
+
 export const PerfumeDocSchema = z.object({
   slug,
-  /** Nombre de la fragancia de referencia si `inspired`; si no, nombre del producto. */
+  /** Nombre de la fragancia (p. ej. "Delina"); la marca va en brandId. */
   name: trimmed(140).min(1),
   brandId: slug,
-  inspired: z.boolean(),
   description: trimmed(2000),
   gender: z.enum(GENDERS),
   house: z.enum(HOUSES),
@@ -61,7 +99,8 @@ export const PerfumeDocSchema = z.object({
     base: z.array(trimmed(40).min(1)).max(12),
   }),
   categoryIds: z.array(slug).max(10),
-  sizes: z.array(PerfumeSizeSchema).min(1).max(10),
+  /** Líneas en las que se ofrece el perfume, con sus tamaños y precios. */
+  offers: OffersSchema,
   badges: z.array(z.enum(BADGES)).max(3),
   leadTime: trimmed(80).nullable(),
   images: z.array(PerfumeImageSchema).max(12),
@@ -99,6 +138,9 @@ export const SiteSettingsDocSchema = z.object({
 
 export type PerfumeDoc = z.infer<typeof PerfumeDocSchema>;
 export type PerfumeImageDoc = z.infer<typeof PerfumeImageSchema>;
+export type Line = (typeof LINES)[number];
+export type OffersDoc = z.infer<typeof OffersSchema>;
+export type PricedSizeDoc = z.infer<typeof PricedSizeSchema>;
 export type BrandDoc = z.infer<typeof BrandDocSchema>;
 export type SiteSettingsDoc = z.infer<typeof SiteSettingsDocSchema>;
 export type CatalogSizeDoc = z.infer<typeof CatalogSizeSchema>;

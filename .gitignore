@@ -43,3 +43,6 @@ brand/.venv/
 serviceAccount*.json
 .env.*
 !.env.example
+
+# Respaldos locales de Firestore (contienen datos del negocio)
+backups/

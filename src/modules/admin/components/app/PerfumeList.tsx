@@ -6,6 +6,21 @@ import { Button, inputClass, Notice, Skeleton } from './ui';
 
 const HOUSE_LABEL = { nicho: 'Nicho', disenador: 'Diseñador', arabe: 'Árabe' } as const;
 const GENDER_LABEL = { hombre: 'Hombre', mujer: 'Mujer', unisex: 'Unisex' } as const;
+const LINE_LABEL = {
+  inspiracion: 'Inspiración',
+  replica: 'Réplica 1.1',
+  original: 'Original',
+} as const;
+type LineKey = keyof typeof LINE_LABEL;
+
+/** Líneas activas del perfume, en orden. */
+const activeLines = (p: PerfumeDoc): LineKey[] =>
+  (Object.keys(LINE_LABEL) as LineKey[]).filter((line) => p.offers[line].active);
+/** Solo inspiración: se muestra "Inspirado en …". */
+const onlyInspiration = (p: PerfumeDoc) => {
+  const lines = activeLines(p);
+  return lines.length === 1 && lines[0] === 'inspiracion';
+};
 
 /** Perfumes por página: 10 en escritorio (tabla) y 5 en móvil (tarjetas). */
 const PAGE_SIZE_DESKTOP = 10;
@@ -35,6 +50,7 @@ export default function PerfumeList() {
   const [house, setHouse] = useState('');
   const [gender, setGender] = useState('');
   const [status, setStatus] = useState('');
+  const [line, setLine] = useState('');
   const [reload, setReload] = useState(0);
   const [page, setPage] = useState(1);
   const isDesktop = useIsDesktop();
@@ -65,12 +81,13 @@ export default function PerfumeList() {
       if (house && p.house !== house) return false;
       if (gender && p.gender !== gender) return false;
       if (status && p.status !== status) return false;
+      if (line && !p.offers[line as LineKey].active) return false;
       return true;
     });
-  }, [perfumes, brands, query, house, gender, status]);
+  }, [perfumes, brands, query, house, gender, status, line]);
 
   // Al cambiar la búsqueda o un filtro se vuelve a la primera página.
-  useEffect(() => setPage(1), [query, house, gender, status, PAGE_SIZE]);
+  useEffect(() => setPage(1), [query, house, gender, status, line, PAGE_SIZE]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -86,6 +103,7 @@ export default function PerfumeList() {
     setHouse('');
     setGender('');
     setStatus('');
+    setLine('');
   };
 
   return (
@@ -102,7 +120,7 @@ export default function PerfumeList() {
         </Button>
       </header>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))]">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))]">
         <input
           type="search"
           placeholder="Buscar por perfume o marca"
@@ -111,6 +129,19 @@ export default function PerfumeList() {
           onChange={(e) => setQuery(e.target.value)}
           className={inputClass}
         />
+        <select
+          aria-label="Línea"
+          value={line}
+          onChange={(e) => setLine(e.target.value)}
+          className={inputClass}
+        >
+          <option value="">Todas las líneas</option>
+          {Object.entries(LINE_LABEL).map(([v, l]) => (
+            <option key={v} value={v}>
+              {l}
+            </option>
+          ))}
+        </select>
         <select
           aria-label="Casa"
           value={house}
@@ -178,7 +209,7 @@ export default function PerfumeList() {
                 <span className="flex items-start justify-between gap-3">
                   <span className="flex min-w-0 flex-col">
                     <span className="font-medium">
-                      {p.inspired && <span className="text-ink-soft">Inspirado en </span>}
+                      {onlyInspiration(p) && <span className="text-ink-soft">Inspirado en </span>}
                       {p.name}
                     </span>
                     <span className="truncate text-xs text-ink-soft">
@@ -192,7 +223,10 @@ export default function PerfumeList() {
                   </span>
                 </span>
                 <span className="text-xs text-ink-soft">
-                  {HOUSE_LABEL[p.house]} · {GENDER_LABEL[p.gender]} ·{' '}
+                  {activeLines(p)
+                    .map((l) => LINE_LABEL[l])
+                    .join(' · ')}{' '}
+                  · {HOUSE_LABEL[p.house]} ·{' '}
                   {p.images.length ? `${p.images.length} foto(s)` : 'Sin fotos'}
                 </span>
               </a>
@@ -207,6 +241,7 @@ export default function PerfumeList() {
             <thead className="border-b border-line text-[11px] tracking-[0.12em] text-ink-soft uppercase">
               <tr>
                 <th className="px-4 py-3 font-medium">Perfume</th>
+                <th className="px-4 py-3 font-medium">Líneas</th>
                 <th className="px-4 py-3 font-medium">Casa</th>
                 <th className="px-4 py-3 font-medium">Género</th>
                 <th className="px-4 py-3 font-medium">Fotos</th>
@@ -222,13 +257,18 @@ export default function PerfumeList() {
                       className="flex flex-col hover:text-crimson"
                     >
                       <span className="font-medium">
-                        {p.inspired && <span className="text-ink-soft">Inspirado en </span>}
+                        {onlyInspiration(p) && <span className="text-ink-soft">Inspirado en </span>}
                         {p.name}
                       </span>
                       <span className="text-xs text-ink-soft">
                         {brands.get(p.brandId)?.name ?? p.brandId}
                       </span>
                     </a>
+                  </td>
+                  <td className="px-4 py-3 text-xs">
+                    {activeLines(p)
+                      .map((l) => LINE_LABEL[l])
+                      .join(' · ')}
                   </td>
                   <td className="px-4 py-3">{HOUSE_LABEL[p.house]}</td>
                   <td className="px-4 py-3">{GENDER_LABEL[p.gender]}</td>

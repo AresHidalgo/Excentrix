@@ -8,6 +8,10 @@ import { sortItems } from './sorting';
  * datos del perfume; las manuales leen el campo que el admin asigna (house o categoryIds).
  */
 export const COLLECTION_RULES: Record<string, (p: Perfume) => boolean> = {
+  // Automáticas: líneas de producto
+  inspiraciones: (p) => p.lines.includes('inspiracion'),
+  'replicas-1-1': (p) => p.lines.includes('replica'),
+  originales: (p) => p.lines.includes('original'),
   // Automáticas
   'nuevos-lanzamientos': (p) => p.badges.includes('nuevo'),
   ofertas: (p) => isOnSale(p),
@@ -30,6 +34,7 @@ export function toFacetItem(p: Perfume): FacetItem {
     gender: p.gender,
     brand: p.brand,
     families: p.olfactoryFamily,
+    lines: p.lines,
     presentations: [...new Set(p.variants.map((v) => v.type))],
     sizes: [...new Set(p.variants.map((v) => v.ml))].sort((a, b) => a - b),
     priceFrom: priceFrom(p),

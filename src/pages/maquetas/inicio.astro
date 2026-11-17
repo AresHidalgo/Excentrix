@@ -15,7 +15,13 @@ import {
   PrestigeCollection,
   StoreLayout,
 } from '@modules/content';
-import { INSPIRED_NOTICE } from '@modules/product';
+import {
+  INSPIRED_NOTICE,
+  LINE_COLLECTION,
+  LINE_LABEL,
+  LINE_ORDER,
+  LINE_SUMMARY,
+} from '@modules/product';
 import ExcentrixHero from '@modules/content/components/home/ExcentrixHero.astro';
 
 const perfumes = getPerfumes();
@@ -40,6 +46,13 @@ const houses = [
   },
 ].map((h) => ({ ...h, href: routes.collection(h.slug), count: countCollection(h.slug) }));
 
+const lines = LINE_ORDER.map((line) => ({
+  title: LINE_LABEL[line],
+  text: LINE_SUMMARY[line],
+  href: routes.collection(LINE_COLLECTION[line].slug),
+  count: countCollection(LINE_COLLECTION[line].slug),
+}));
+
 const genders = [
   { slug: 'hombre', title: 'Masculinos', text: 'Fragancias intensas y seductoras.' },
   { slug: 'mujer', title: 'Femeninos', text: 'Aromas delicados y envolventes.' },
@@ -54,6 +67,7 @@ const newArrivals = getCollectionPerfumes(perfumes, 'nuevos-lanzamientos', 'nove
   <LoyaltyCard />
   <PrestigeCollection
     total={perfumes.length}
+    lines={lines}
     houses={houses}
     genders={genders}
     sizes={getCatalogSizes()}
