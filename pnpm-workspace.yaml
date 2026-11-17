@@ -18,6 +18,10 @@ trustPolicyExclude:
 # Revisados y dejados sin ejecutar a propósito (firebase-tools funciona sin ellos):
 # - protobufjs: postinstall informativo.
 # - re2: descarga un binario nativo o compila con node-gyp; es opcional.
+# - @firebase/util: postinstall opcional para autoconfiguración de Firebase Hosting.
+# - esbuild (vía tsx): verifica el binario; funciona con el paquete de plataforma opcional.
 ignoredBuiltDependencies:
+  - '@firebase/util'
+  - esbuild
   - protobufjs
   - re2
